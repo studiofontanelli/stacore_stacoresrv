@@ -1,0 +1,8 @@
+it/csi/stacore/stacoresrv/api/dto/Nazione.class
+it/csi/stacore/stacoresrv/api/dto/SearchComuneRequest.class
+it/csi/stacore/stacoresrv/api/dto/Provincia.class
+it/csi/stacore/stacoresrv/api/dto/SearchNazioneRequest.class
+it/csi/stacore/stacoresrv/api/dto/ErrorDto.class
+it/csi/stacore/stacoresrv/api/dto/GenericResponse.class
+it/csi/stacore/stacoresrv/api/dto/ErrorDetail.class
+it/csi/stacore/stacoresrv/api/dto/Comune.class

@@ -1,0 +1,805 @@
+{
+	"info": {
+		"_postman_id": "cc209278-ea46-4c8e-b949-802799954c1e",
+		"name": "TEST PLAN - STADATITRASVSRV",
+		"description": "API REST Componente stacoresrv",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3823498"
+	},
+	"item": [
+		{
+			"name": "TST01 -TEST RESOURCES",
+			"item": [
+				{
+					"name": "TST01A - TEST RESOURCE",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/test/resources",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"test",
+								"resources"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				}
+			],
+			"description": "Test del servizio di test resource. Serve solo per verificarne il funzionamento iniziale.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "TST02 - Comune",
+			"item": [
+				{
+					"name": "TST02A - Recupera il  Comune per ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/comune/12295",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"comune",
+								"12295"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST02B - Recupera il  Comune per ID - ID non valorizzato",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{localhost}}/stacoresrv/api/comune",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"comune"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST02C - Recupera il  Comune per ID - ID non trovato",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/comune/0",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"comune",
+								"0"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST02D - Recupera Comune per istat",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/comune?istat=087057",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"comune"
+							],
+							"query": [
+								{
+									"key": "istat",
+									"value": "087057"
+								}
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST02E - Recupera Comune per istat - ISTAT non valorizzato",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/comune?istat=",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"comune"
+							],
+							"query": [
+								{
+									"key": "istat",
+									"value": ""
+								}
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST02F - Cerca Comune per denominazione",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"denomonazione\": \"TORINO\"\n}"
+						},
+						"url": {
+							"raw": "{{localhost}}/stacoresrv/api/comune/_search",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"comune",
+								"_search"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST02G - Cerca Comune per denominazione e data",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"denomonazione\": \"TORINO\",\n    \"dataValidita\": \"01-07-2022\"\n}"
+						},
+						"url": {
+							"raw": "{{localhost}}/stacoresrv/api/comune/_search",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"comune",
+								"_search"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST02H - Cerca Comune request non valorizzata",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{localhost}}/stacoresrv/api/comune/_search",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"comune",
+								"_search"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST02I - Cerca Comune per denominazione denominazione non valorizzata",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"denomonazione\": \"\"\n}"
+						},
+						"url": {
+							"raw": "{{localhost}}/stacoresrv/api/comune/_search",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"comune",
+								"_search"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST02L - Cerca Comune per denominazione not found",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"denomonazione\": \"gdbddjd\"\n}"
+						},
+						"url": {
+							"raw": "{{localhost}}/stacoresrv/api/comune/_search",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"comune",
+								"_search"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				}
+			],
+			"description": "Test del servizio di test resource. Serve solo per verificarne il funzionamento iniziale.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "TST03 - Nazione",
+			"item": [
+				{
+					"name": "TST03A - Recupera la nazione per ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{localhost}}/stacoresrv/api/nazione/219",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"nazione",
+								"219"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST03B - Recupera la nazione  per ID - ID non valorizzato",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{localhost}}/stacoresrv/api/nazione/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"nazione",
+								""
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST03C - Recupera la nazione per ID - ID non trovato",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/nazione/77777777",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"nazione",
+								"77777777"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST03F - Cerca Nazione per denominazione",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"denomonazione\": \"IR\"\n    \n}"
+						},
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/nazione/_search",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"nazione",
+								"_search"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST04F - Cerca Nazione per denominazione e data",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"denomonazione\": \"IN\",\n    \"dataValidita\": \"01-08-2022\"\n    \n}"
+						},
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/nazione/_search",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"nazione",
+								"_search"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				}
+			],
+			"description": "Test del servizio di test resource. Serve solo per verificarne il funzionamento iniziale.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "TST04 - Province",
+			"item": [
+				{
+					"name": "TST04A - Ricerca le province nazionali",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/province?search_type=all",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"province"
+							],
+							"query": [
+								{
+									"key": "search_type",
+									"value": "all"
+								}
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST04B - Ricerca le province piemontesi",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/province?search_type=PIEMONTE",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"province"
+							],
+							"query": [
+								{
+									"key": "search_type",
+									"value": "PIEMONTE"
+								}
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST04C - Ricerca le province Errore di validazione",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/province?search_type=WRONG_VALUE",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"province"
+							],
+							"query": [
+								{
+									"key": "search_type",
+									"value": "WRONG_VALUE"
+								}
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				},
+				{
+					"name": "TST04D - Ricerca le province Errore di validazione",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{dev}}/stacoresrv/api/province",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"stacoresrv",
+								"api",
+								"province"
+							]
+						},
+						"description": "Metodo di ricerca dati avviso di accertamento"
+					},
+					"response": []
+				}
+			],
+			"description": "Test del servizio di test resource. Serve solo per verificarne il funzionamento iniziale.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "localhost",
+			"value": "http://127.0.0.1:8080",
+			"type": "string"
+		},
+		{
+			"key": "dev",
+			"value": "http://dev-applogic.reteunitaria.piemonte.it",
+			"type": "string"
+		}
+	]
+}

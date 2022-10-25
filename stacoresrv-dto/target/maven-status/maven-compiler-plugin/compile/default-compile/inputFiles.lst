@@ -1,0 +1,8 @@
+/opt/java/projects/studiofontanelli/stacore_stacoresrv/stacoresrv-dto/src/main/java/it/csi/stacore/stacoresrv/api/dto/SearchNazioneRequest.java
+/opt/java/projects/studiofontanelli/stacore_stacoresrv/stacoresrv-dto/src/main/java/it/csi/stacore/stacoresrv/api/dto/GenericResponse.java
+/opt/java/projects/studiofontanelli/stacore_stacoresrv/stacoresrv-dto/src/main/java/it/csi/stacore/stacoresrv/api/dto/Provincia.java
+/opt/java/projects/studiofontanelli/stacore_stacoresrv/stacoresrv-dto/src/main/java/it/csi/stacore/stacoresrv/api/dto/ErrorDetail.java
+/opt/java/projects/studiofontanelli/stacore_stacoresrv/stacoresrv-dto/src/main/java/it/csi/stacore/stacoresrv/api/dto/SearchComuneRequest.java
+/opt/java/projects/studiofontanelli/stacore_stacoresrv/stacoresrv-dto/src/main/java/it/csi/stacore/stacoresrv/api/dto/Comune.java
+/opt/java/projects/studiofontanelli/stacore_stacoresrv/stacoresrv-dto/src/main/java/it/csi/stacore/stacoresrv/api/dto/Nazione.java
+/opt/java/projects/studiofontanelli/stacore_stacoresrv/stacoresrv-dto/src/main/java/it/csi/stacore/stacoresrv/api/dto/ErrorDto.java

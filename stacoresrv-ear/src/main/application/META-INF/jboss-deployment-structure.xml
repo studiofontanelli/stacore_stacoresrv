@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jboss-deployment-structure
+	xmlns="urn:jboss:deployment-structure:1.2">
+
+	<deployment>
+		
+		<exclude-subsystems>
+      		<subsystem name="security" />
+    	</exclude-subsystems>
+		
+		
+   		 
+		<dependencies>
+			<module name="org.springframework.spring"         export="true" meta-inf="export" />
+			<module name="org.jboss.resteasy.resteasy-spring" export="true" meta-inf="export" />
+			<module name="javax.wsdl4j.api"                   export="true"     meta-inf="export" />
+			<module name="javax.annotation.api"               export="true" meta-inf="export"/>
+			
+			<module name="org.apache.commons.collections"        export="true" meta-inf="export"/>
+			<module name="org.apache.commons.lang"               export="true" meta-inf="export"/>
+			
+		</dependencies>
+	</deployment>
+
+</jboss-deployment-structure>
+
+
+
+
+
