@@ -26,6 +26,15 @@
           factory-bean="pdProxyFactory" factory-method="getObject">
         <constructor-arg value="classpath:/pd/pd_servizioDatiTrasversali.xml"/>
     </bean>
-	
+    
+    
+    <!-- STAON SERVIZIO RIMBORSI -->
+    <bean id="servizioRimborsiInterface"
+          class="it.csi.stacore.staon.interfaceCSI.ServizioRimborsiInterface"
+          factory-bean="pdProxyFactory" factory-method="getObject">
+        <constructor-arg value="classpath:/pd/pd_servizioRimborsi.xml"/>
+    </bean>
+    
+    
 
 </beans>

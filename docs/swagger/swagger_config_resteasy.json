@@ -13,5 +13,6 @@
 "generateSwaggerMetadata": false,
 "attributeSerializationStrategy": "explicit-as-modeled",
 "accessHttpHeaders": true,
-"serializableModel": true
+"serializableModel": true,
+"jsonLibrary": "fasterxml-jackson"
 }

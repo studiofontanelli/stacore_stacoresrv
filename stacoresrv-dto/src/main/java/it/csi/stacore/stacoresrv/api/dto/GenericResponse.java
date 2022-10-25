@@ -1,12 +1,13 @@
 package it.csi.stacore.stacoresrv.api.dto;
 
-import java.io.Serializable;
 import java.util.Objects;
-
+import java.util.ArrayList;
+import io.swagger.annotations.ApiModel;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
+import javax.validation.constraints.*;
+import io.swagger.annotations.*;
 
 @ApiModel(description="Risposta di un servizio generico")
 

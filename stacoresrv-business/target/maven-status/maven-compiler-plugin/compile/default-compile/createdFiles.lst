@@ -3,6 +3,7 @@ it/csi/stacore/stacoresrv/business/aspect/AdapterAspect.class
 it/csi/stacore/stacoresrv/business/helper/impl/PrivinciaHelperImpl$SearchType.class
 it/csi/stacore/stacoresrv/business/helper/impl/NazioneHelperImpl.class
 it/csi/stacore/stacoresrv/business/exception/HelperException.class
+it/csi/stacore/stacoresrv/business/adapter/impl/DatiCalcoloRimborsoVOAdapterImpl.class
 it/csi/stacore/stacoresrv/business/adapter/NazioneAdapter.class
 it/csi/stacore/stacoresrv/business/aspect/CommonAspect.class
 it/csi/stacore/stacoresrv/business/adapter/ProvinciaAdapter.class
@@ -19,6 +20,10 @@ it/csi/stacore/stacoresrv/business/helper/impl/PrivinciaHelperImpl.class
 it/csi/stacore/stacoresrv/business/exception/ValidationException.class
 it/csi/stacore/stacoresrv/business/adapter/ComuneAdapter.class
 it/csi/stacore/stacoresrv/business/exception/NoDataFoundException.class
+it/csi/stacore/stacoresrv/business/adapter/DatiCalcoloRimborsoVOAdapter.class
 it/csi/stacore/stacoresrv/business/dto/ErrorDetailDto.class
+it/csi/stacore/stacoresrv/business/helper/impl/RimborsiHelperImpl.class
 it/csi/stacore/stacoresrv/business/aspect/HelperAspect.class
+it/csi/stacore/stacoresrv/business/helper/impl/RimborsiHelperImpl$SearchType.class
 it/csi/stacore/stacoresrv/business/helper/impl/CommonHelperImpl.class
+it/csi/stacore/stacoresrv/business/helper/RimborsiHelper.class

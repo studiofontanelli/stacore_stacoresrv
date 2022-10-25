@@ -1,14 +1,15 @@
 package it.csi.stacore.stacoresrv.api.dto;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
+import java.util.ArrayList;
+import io.swagger.annotations.ApiModel;
+import it.csi.stacore.stacoresrv.api.dto.ErrorDetail;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
+import javax.validation.constraints.*;
+import io.swagger.annotations.*;
 
 @ApiModel(description="Rappresenta l'errore restituito da servizio")
 
@@ -68,7 +69,7 @@ public class ErrorDto  implements Serializable {
    **/
   
   @ApiModelProperty(value = "i dettagli errore")
-  @JsonProperty("error_details") 
+  @JsonProperty("errorDetails") 
  
   public List<ErrorDetail> getErrorDetails() {
     return errorDetails;

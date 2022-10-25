@@ -114,6 +114,7 @@
 		
 		
 		<staonsrv-staonsrv.client>3.27.0</staonsrv-staonsrv.client>
+		<staonsrv-staonutil.client>3.21.0</staonsrv-staonutil.client>
 
 		<!-- EHCACHE -->
 		<ehcache.version>2.9.0</ehcache.version>

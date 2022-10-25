@@ -1,0 +1,1745 @@
+swagger: '2.0'
+info:
+  description: API componente stacoresrv
+  version: 1.0.0
+  title: STACORESRV
+  contact:
+    email: andrea.fontanelli@eng.it
+    
+# tags are used for organizing operations
+tags:
+- name: test
+  description: test resources
+- name: rimborsi
+  description: I rimborsi
+    
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+# basePath: /studiofontanelli/stacoresrv/1.0.0
+
+# schemes:
+#  - http
+
+paths:
+  /test/resources:
+    get:
+      tags:
+        - test
+      summary: Test resources
+      description: Effettua il test dei servizi richiamati
+      operationId: testResources
+      produces:
+      - application/json
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GenericResponse'
+          description: OK
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorDto'
+  
+  /rimborsi/calcola:
+    post:  
+      tags:
+        - rimborsi
+      description: >
+        Effettua il calcolo del rimborso
+      operationId: calcolaRimborso
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          required: true
+          name: datiCalcolo
+          schema: 
+            $ref: '#/definitions/DatiCalcoloRimborsoVO'
+          description: > 
+            I dati calcolo per effettuare il rimborso
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/EsitoCalcolaRimborso'
+          description: OK
+        400:
+          description: "Parametro non valorizzato"
+        404:
+          description: "Comune non trovato"
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorDto'  
+  
+     
+               
+     
+     
+               
+   
+definitions:
+  
+  DatiCalcoloVO:
+    type: object
+    description: Oggetto utilizzato per effettuare il calcolo tassa
+    properties:
+      denomonazione:
+        type: string
+        description: >
+          il nome della nazione
+        example: 'FRANCIA'
+      data_scadenza:
+        type: string
+        format: date
+        description: >
+          la data di scadenza nel formato DD-MM-YYYY    
+        example: 15-08-2022
+  
+  DatiCalcoloRimborsoVO:
+    type: object
+    description: Oggetto utilizzato per calcolare il rimborso
+    properties:
+      targa:
+        type: string
+        description: >
+          la targa del veicolo
+      tipo_veicolo:
+        type: string
+        description: >
+          Il codice tipo veicolo (A = Autoveicolo, M= Motoveicolo, ecc )
+      data_scadenza:
+        type: string
+        format: date
+        description: >
+          la data di scadenza nel formato DD-MM-YYYY    
+        example: 15-08-2022
+      mesi_validita:
+        type: integer
+        description: i mesi di validità ( 12 per validità annuale)
+      data_riferimento:
+        type: string
+        format: date
+        description: >
+          la data di riferimento nel formato DD-MM-YYYY    
+        example: 15-08-2022  
+  EsitoCalcolaRimborso:
+    type: object
+    description: Il risultato ottenuto dal calcola rimborso
+    properties:
+      denomonazione:
+        type: string
+        description: >
+          il nome della nazione
+        example: 'FRANCIA'
+      data_ultimo_giorno_utile_pagamento:
+        type: string
+        format: date
+        description: >
+          la data ultimo giorno utile pagamento nel formato DD-MM-YYYY    
+        example: 15-08-2022
+  
+  
+  VincoliRicercaBonusVO:
+     type: object
+     description: oggetto bonus
+     properties:
+        anno:
+           type: string
+        id_proprietario:
+           type: integer
+           format: int64
+
+  RiduzioneVO:
+     type: object
+     description: oggetto riduzione
+     properties:
+        decodifica:
+           type: object
+           $ref: '#/definitions/DecodificaVO' 
+  
+  TipoIntermediarioVO:
+     type: object
+     description: oggetto Tipo Intermediario
+     properties:
+        decodifica:
+           type: object
+           $ref: '#/definitions/DecodificaVO'
+  
+  TipoSanzionamento:
+    type: string
+    enum: &TipoSanzionamento 
+       - SANZIONAMENTO_NORMATIVA_IN_CORSO
+       - ACCERTAMENTO_IN_CORSO
+  
+  TipoSanzionamentoVO:
+     type: object
+     description: oggetto Tipo Sanzionamento
+     properties:                
+        decodifica:
+           type: object
+           $ref: '#/definitions/DecodificaVO'   
+  
+  ImportoVO:
+    type: object
+    description: oggetto importo
+    properties:       
+       tassa:
+          type: object
+          $ref: '#/definitions/ValutaVO'
+       sanzioni:
+          type: object
+          $ref: '#/definitions/ValutaVO'
+       interessi:
+          type: object
+          $ref: '#/definitions/ValutaVO'
+       totale:
+          type: object
+          $ref: '#/definitions/ValutaVO'
+           
+  PagamentoVO:
+     type: object
+     description: oggetto pagamento
+     properties:
+        id_pagamento:
+           type: integer
+           format: int64
+        lista_riduzioni:
+           type: array
+           items:
+              type: object
+              $ref: '#/definitions/RiduzioneVO'
+        id_veicolo:
+           type: integer
+           format: int64
+        regione_benificiaria:           
+           type: object
+           $ref: '#/definitions/RegioneVO'
+        regione_incasso:           
+           type: object
+           $ref: '#/definitions/RegioneVO'
+        dati_calcolo:           
+           type: string
+        tipo_intermediario:           
+           type: object
+           $ref: '#/definitions/TipoIntermediarioVO'
+        tipo_sanzionamento:           
+           type: object
+           $ref: '#/definitions/TipoSanzionamentoVO'
+        tipo_veicolo:           
+           type: object
+           $ref: '#/definitions/TipoVeicoloVO'
+        data_pagamento:
+           type: string
+           format: date
+        numero_ricevuta:
+           type: string
+        importo:
+           type: object
+           $ref: '#/definitions/ImportoVO'
+        #String pathImgBollettino NON CENSITA
+        is_bollettino:
+           type: boolean
+        tipo_intermediario_originale:           
+           type: string
+        codice_intermediario_originale:           
+           type: string
+        tipo_sanzionamento_originale:           
+           type: string
+        divisa_originale:           
+           type: string
+        identificativo_fiscale_proprietario_originale:           
+           type: string
+        tipo_veicolo_originale:           
+           type: string
+        has_variato:           
+           type: boolean
+        iuv_pag:           
+           type: string
+        id_operazione_logica:           
+           type: integer
+           format: int64
+        id_operazione:           
+           type: integer
+           format: int64
+  
+  TipoContributo:
+    type: string
+    enum: &TipoContributo 
+       - TASSA_NON_DOVUTA                # -> "1"   
+       - INTERESSI_SANZIONI_NON_DOVUTA   # -> "2"
+       - CONTRIBUTO_SU_IMPORTO_POSITIVO  # -> "3"
+       - CONTRIBUTO_SU_IMPORTO_NEGATIVO  # -> "4"
+       - SANZIONI_NON_DOVUTA             # -> "5"
+           
+  TipoContributoVO:
+     type: object
+     description: tipo contributo
+     properties:        
+        decodifica:
+           type: object
+           $ref: '#/definitions/DecodificaVO'
+  
+  Contributo:
+    type: string
+    enum: &Contributo 
+       - MOTIVAZIONE_RIMBORSO            # -> "CONTRIBUTO PER RIMBORSO"   
+       - MOTIVAZIONE_STORNO_RIMBORSO     # -> "CONTRIBUTO PER STORNO RIMBORSO"
+       - MOTIVAZIONE_CREAZIONE_CREDITO   # -> "CONTRIBUTO PER CREAZIONE CREDITO"
+       - MOTIVAZIONE_EROGAZIONE_CREDITO  # -> "CONTRIBUTO PER EROGAZIONE CREDITO"
+       - MOTIVAZIONE_STORNO_CREDITO      # -> "CONTRIBUTO PER STORNO CREDITO"
+       - MOTIVAZIONE_STORNO_PER_CHIUSURA_CREDITO      # -> "CONTRIBUTO PER CHIUSURA CREDITO"
+       - MOTIVAZIONE_EROGAZIONE_BONUS      # -> "CONTRIBUTO PER EROGAZIONE BONUS"
+       - MOTIVAZIONE_EROGAZIONE_CREDITO_POSITIVO_CALCOLO_COMPENSATO   # -> "CONTRIBUTO POSITIVO PER EROGAZIONE CREDITO CALCOLO COMPENSATO"
+       - MOTIVAZIONE_EROGAZIONE_CREDITO_NEGATIVO_CALCOLO_COMPENSATO   # -> "CONTRIBUTO NEGATIVO PER EROGAZIONE CREDITO CALCOLO COMPENSATO"
+       - MOTIVAZIONE_EROGAZIONE_CREDITO_SANZIONI_INTERESSI_NON_DOVUTE # -> "CONTRIBUTO POSITIVO PER SANZIONI ED INTERESSI NON DOVUTE"
+       - MOTIVAZIONE_EROGAZIONE_CREDITO_SANZIONI_NON_DOVUTE           # -> "CONTRIBUTO POSITIVO PER SANZIONI NON DOVUTE"
+       - CODICE_CONTRIBUTO_TASSA_NON_DOVUTA                           # -> "1"
+       - CODICE_CONTRIBUTO_SANZIONI_ED_INTERESSI_NON_DOVUTI           # -> "2"
+       - CODICE_CONTRIBUTO_SU_IMPORTO_POSITIVO                        # -> "3"
+       - CODICE_CONTRIBUTO_SU_IMPORTO_NEGATIVO                        # -> "4"
+       - CODICE_CONTRIBUTO_SANZIONI_NON_DOVUTE                        # -> "5"
+           
+  ContributoVO:
+     type: object
+     description: oggetto contributo
+     properties:        
+        id_contributo:
+           type: integer
+           format: int64
+        id_veicolo:
+           type: integer
+           format: int64
+        tipo_contributo:
+           type: object
+           $ref: '#/definitions/TipoContributoVO'
+        importo:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        motivazione:
+           type: string
+        note:
+           type: string
+        data_concessione:
+           type: string
+           format: date
+        data_cancellazione:
+           type: string
+           format: date
+        divisa_originale:
+           type: string
+
+  ScadenzaVO:
+     type: object
+     description: oggetto scadenza
+     properties:                    
+        has_bollettino:
+           type: boolean
+        numero_ricevuta:
+           type: string
+        lista_pagamenti:
+           type: array
+           items:
+             type: object       
+             $ref: '#/definitions/PagamentoVO'
+        lista_contributi:
+           type: array
+           items:
+             type: object       
+             $ref: '#/definitions/ContributoVO'
+           
+
+  VincoliRicercaScadenzaVO:
+     type: object
+     description: oggetto per eseguire la ricerca scadenza
+     properties:                    
+        id_tipologia_veicolo:
+           type: integer
+           format: int64
+        targa:
+           type: string
+        scadenza:
+           type: integer
+           format: int32
+        validita:
+           type: integer
+           format: int32
+        has_bollettino:
+           type: boolean
+        numero_ricevuta:
+           type: string
+           
+
+  VincoliRicercaVeicoloVO:
+     type: object
+     description: oggetto per eseguire la ricerca veicolo
+     properties:                    
+        id_tipo_veicolo:
+           type: integer
+           format: int64
+        targa:
+           type: string
+  
+  VincoliRicercaPosizioniVO:
+     type: object
+     description: oggetto per eseguire la ricerca della posizioni
+     properties:                    
+        id_veicolo:
+           type: integer
+           format: int64
+  
+  Posizione:
+    type: string
+    enum: &Posizione 
+       - STATO_APERTA     # -> "A"   
+       - STATO_CHIUSA     # -> "C"
+  
+  #it.csi.stacore.staon.business.bo
+  PosizioneVO:
+     type: object
+     description: Posizione
+     properties:                     
+        id:
+           type: integer
+           format: int64
+        id_operazione_logica:
+           type: integer
+           format: int64
+        evento_inzio:
+           type: object
+           $ref: '#/definitions/EventoVO'
+        evento_fine:
+           type: object
+           $ref: '#/definitions/EventoVO'
+        id_proprietario:
+           type: integer
+           format: int64
+        id_veicolo:
+           type: integer
+           format: int64
+        fonte:
+           type: object
+           $ref: '#/definitions/FonteVO'
+        id_tipo_soggetto_passivo:
+           type: integer
+           format: int64
+  
+  AvvisoAccertamentoVO:
+     type: object
+     description: accertamento
+     properties:             
+        id_avviso_accertamento:
+           type: integer
+           format: int64
+        id_pratica:
+           type: integer
+           format: int64
+        anno_accertamento:
+           type: integer
+           format: int32
+        tipo_irreg_accertamento:
+           type: object
+           $ref: '#/definitions/TipoIrregAccertamentoVO'
+        id_posizione:
+           type: integer
+           format: int64
+        causale_chiusura:
+           type: object
+           $ref: '#/definitions/CausaleChiusuraVO'
+        sotto_causale_chiusura:
+           type: object
+           $ref: '#/definitions/SottoCausaleChiusuraVO'
+        tipo_periodicita:
+           type: object
+           $ref: '#/definitions/TipoPeriodicitaVO'
+        avviso_accertamento_ente:
+           type: object
+           $ref: '#/definitions/AvvisoAccertamentoEnteVO'
+        numero_protocollo:
+           type: string
+        data_invio_ultimo_flusso:
+           type: string
+           format: date
+        data_notifica:
+           type: string
+           format: date
+        irreg_accertamento:
+           type: string
+        periodicita:
+           type: string
+        scadenza:
+           type: integer
+           format: int32
+        validita:
+           type: integer
+           format: int32
+        data_pag_vers_insuff:
+           type: string
+           format: date
+        prop_tipo_persona:
+           type: string
+        prop_cod_fiscale:
+           type: string
+        prop_nome:
+           type: string
+        prop_cognome:
+           type: string
+        prop_denominazione:
+           type: string
+        prop_data_nascita:
+           type: string
+           format: date
+        prop_comune_nascita:
+           type: string
+        prop_comune_spedizione:
+           type: string
+        prop_stato_estero_nascita:
+           type: string
+        prop_prov_spedizione:
+           type: string
+        prop_sesso:
+           type: string
+        prop_ind_spedizione_nom:
+           type: string
+        prop_sedime:
+           type: string
+        prop_civico:
+           type: string
+        prop_cap:
+           type: string
+        veic_targa:
+           type: string
+        veic_tipo_veicolo:
+           type: object
+           $ref: '#/definitions/TipoVeicoloVO'
+        veic_desc_tipo_veicolo:
+           type: string
+        veic_data_immatric:
+           type: string
+           format: date
+        veic_id_destinazione:
+           type: integer
+           format: int64
+        veic_desc_destinazione:
+           type: string
+        veic_id_uso:
+           type: integer
+           format: int64
+        veic_id_tipo_riduzione:
+           type: integer
+           format: int64
+        veic_desc_uso:
+           type: string
+        veic_id_alimentazione:
+           type: integer
+           format: int64
+        veic_desc_alimentazione:
+           type: string
+        veic_flag_ecodiesel:
+           type: string
+        id_stato_pratica:
+           type: integer
+           format: int64
+        stato_note:
+           type: string
+        stato_data_regolarizzazione:
+           type: string
+           format: date
+        stato_desc_causale_chiusura:
+           type: string
+        stato_desc_sotto_causale_chiusura:
+           type: string
+        stato_data1_chiusura:
+           type: string
+           format: date
+        stato_data2_chiusura:
+           type: string
+           format: date
+        versato_tassa:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        versato_sanzioni:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        versato_interesse:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        versato_totale:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        dovuto_tassa:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        dovuto_sanzioni:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        dovuto_interesse:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        dovuto_totale:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        dovuto_importo_compensato:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        dovuto_semestri_interessi:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        ruolo_data_invio_flusso:
+           type: string
+           format: date
+        calc_tassa_nei_termini:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        ruolo_semestri:
+           type: integer
+           format: int32
+        ruolo_tassa:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        ruolo_sanzioni:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        ruolo_interesse:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        ruolo_totale:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        gms_id_soggetto:
+           type: integer
+           format: int64
+        identificativo_utente:
+           type: string
+        data_riferimento_calcolo:
+           type: string
+           format: date
+        ct_codice_regola:
+           type: string
+        #La mappa sembra non utilizzata in STAON
+        #Map mappaTipoAlgoritmoDatiTecnici = new HashMap();
+        numero_posti:
+           type: integer
+           format: int32
+        numero_assi:
+           type: integer
+           format: int32
+        veic_KW:
+           type: string
+        veic_massa_complessiva:
+           type: string
+        veic_portata:
+           type: string
+        categoria_euro:
+           type: string
+        veic_desc_riduzione:
+           type: string
+        veic_tassa_no_riduz:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        veic_sanzioni_no_riduz:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        veic_interessi_no_riduz:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        veic_totale_no_riduz:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        veic_num_mensilita_ridotte:
+           type: integer
+           format: int32
+        veic_data_evento:
+           type: string
+           format: date
+        cod_tipo_comunicazione:
+           type: string
+        cod_stato_pratica:
+           type: string
+        desc_stato_pratica:
+           type: string
+        dovuto_rimorchiabilita:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        id_stato_spedizione:
+           type: integer
+           format: int64
+        rinotifica_id_stato:
+           type: integer
+           format: int64
+        rinotifica_data_ricalc_interessi:
+           type: string
+           format: date
+        id_cod_elab:
+           type: integer
+           format: int64
+        causale_sospensione:
+           type: object
+           $ref: '#/definitions/CausaleSospensioneVO'
+        esito_notifica:
+           type: string
+        is_ruolo_EQ:
+           type: boolean
+        descrizione_ruolo_EQ:
+           type: string
+        ugu_ver:
+           type: string
+           format: date
+        ugu_pag:
+           type: string
+           format: date
+        pec:
+           type: string
+        fonte_riferimento_pec:
+           type: string
+        cd_fonte_riferimento_pec:
+           type: integer
+           format: int64
+        id_stato_invio:
+           type: integer
+           format: int64
+        id_stato_indirizzo:
+           type: integer
+           format: int64
+        iuv:
+           type: string
+        aux:
+           type: string
+        cod:
+           type: string
+        codice_iden_ente:
+           type: string
+        stato_mdp:
+           type: integer
+           format: int32
+        descrizione_errore:
+           type: string
+        dovuto_spese_rac:
+           type: object
+           $ref: '#/definitions/ValutaVO'
+        emiss_co2:
+           type: string
+        data_inst_gpl:
+           type: string
+        flag_rim:
+           type: string
+        flag_sosp:
+           type: string
+        cod_categoria:
+           type: string
+        id_veicolo:
+           type: integer
+           format: int64
+        id_proprietario:
+           type: integer
+           format: int64
+        ingiunzione_piano_rata:
+           type: string
+        data_pagamento_ingiunzione:
+           type: string
+           format: date
+        data_acquisizione_pagamento_ingiunzione:
+           type: string
+           format: date
+           
+  CausaleSospensioneVO:
+   type: object   
+   description: causale sospensione
+   properties:
+      decodifica:
+        type: object
+        $ref: '#/definitions/DecodificaVO'
+           
+  ValutaVO:
+   type: object   
+   description: valuta
+   properties:
+      importo:
+         type: number
+         format: double
+      divisa:
+           type: object
+           $ref: '#/definitions/DivisaVO'
+           
+  DivisaVO:
+   type: object   
+   description: divisa
+   properties:
+      decodifica:
+        type: object
+        $ref: '#/definitions/DecodificaVO'         
+  
+  AvvisoAccertamentoEnteVO:
+   type: object   
+   description: avviso accertamento ente
+   properties:
+      id_avviso_accertamento_ente:
+         type: integer
+         format: int64
+      id_ente:
+         type: integer
+         format: int64
+      anno_accertamento:
+         type: integer
+         format: int32
+      tipo_avviso_accertamento:
+        type: object
+        $ref: '#/definitions/TipoAvvisoAccertamentoVO'
+      data_elaborazione:
+         type: string
+         format: date
+  
+  TipoAvvisoAccertamentoVO:
+   type: object   
+   description: tipo  avviso accertamento
+   properties:
+      decodifica:
+        type: object
+        $ref: '#/definitions/DecodificaVO'
+  
+  TipoPeriodicitaVO:
+   type: object   
+   description: tipo periodicita
+   properties:
+      decodifica:
+        type: object
+        $ref: '#/definitions/DecodificaVO'                 
+  
+  SottoCausaleChiusuraVO:
+   type: object   
+   description: sotto causale chiusura
+   properties:
+      id_sotto_causale_chiusura:
+         type: integer
+         format: int64
+      id_causale_chiusura:
+         type: integer
+         format: int64
+      descrizione:
+         type: string  
+  
+  CausaleChiusuraVO:
+   type: object   
+   description: causale chiusura
+   properties:
+      decodifica:
+        type: object
+        $ref: '#/definitions/DecodificaVO'      
+  
+  TipoIrregAccertamento:
+    type: string
+    enum: &TipoIrregAccertamento 
+       - COD_VERSAMENTO_MANCANTE             # -> "VM"
+       - COD_VERSAMENTO_INSUFF               # -> "TI"
+       - COD_VERSAMENTO_INSUFF_RITARDATO     # -> "TE"
+       - COD_VERSAMENTO_RITARDATO            # -> "TR"
+  
+  TipoIrregAccertamentoVO:
+   type: object   
+   description: Tipo Irreg accertamento
+   properties:
+      decodifica:
+        type: object
+        $ref: '#/definitions/DecodificaVO'      
+
+  RicercaAvvisoAccertamentoVO:
+     type: object
+     description: fields applicati nella ricerca
+     properties:             
+        identificativo_fiscale:
+           type: string
+           description: codice fiscale
+        protocollo:
+           type: string
+           description: numero protocollo
+        targa:
+           type: string
+           description: targa veicolo
+        tipo_veicolo:
+           type: object
+           $ref: '#/definitions/TipoVeicoloVO'           
+        scadenza:
+           type: string           
+        validta:
+           type: integer
+           format: int32
+           description: validita
+        anno_accertamento:
+           type: integer
+           format: int32
+           description: anno accertamento
+        identificativo_utente:
+           type: string
+        stato_accertamento:
+           type: object
+           $ref: '#/definitions/StatoAccertamentoVO'
+           description: stato accertamento
+           
+  StatoAccertamento:
+    type: integer
+    format: int32
+    enum: &StatoAccertamento 
+       - ID_STATO_PRATICA_DA_INOLTRARE       # -> 1
+       - ID_STATO_PRATICA_INOLTRATA          # -> 2
+       - ID_STATO_PRATICA_CHIUSA             # -> 3
+       - ID_STATO_PRATICA_ISCRITTA_A_RUOLO   # -> 4
+       - ID_STATO_PRATICA_RATEIZZATA         # -> 5
+       - ID_STATO_PRATICA_SOSPESA            # -> 6 
+ 
+  StatoAccertamentoVO:
+   type: object   
+   description: stato in cui versa l'accertamento
+   properties:
+      decodifica:
+        type: object
+        $ref: '#/definitions/DecodificaVO'            
+
+  VincoliRicercaProprietariVO:
+     type: object
+     description: fields applicati nella ricerca
+     properties:             
+        identificativoFiscale:
+           type: string
+           description: codice fiscale
+        personaFisica:
+           type: boolean
+           description: se true si tratta di una persona fisica, altrimenti giuridica
+        cognome:
+           type: string
+           description: cognome persona fisica
+        nome:
+           type: string
+           description: nome persona fisica
+        dataNascita:
+           type: string
+           format: date
+        demonimazionePG:
+           type: string
+           description: denominazione qualora si tratta di persona giuridica
+
+  IsProprietarioNelPeriodoCheckVO:
+     type: object
+     description: response true / false
+     properties:
+        check:
+           type: boolean
+           description: output della verifica 
+
+  ParametroApplicativoVO:
+     type: object
+     description: parametro applicativo
+     properties:
+        name:
+           type: string
+           description: identificativo parametro applicativo
+        value:
+           type: string
+           description: valore parametro appliactivo 
+
+  VincoliRicercaAgevolazioniVO:
+     type: object
+     description: fields applicati nella ricerca. Aggiunti secondo logica AND
+     properties:
+        targa:
+           type: array
+           items:
+              type: string
+           description: targa del veicolo
+        tipoVeicoloOriginale:
+           type: string
+           description: tipo veicolo
+        identificativoFiscaleProprietarioOriginale:
+           type: string
+           description: codice fiscale
+        numProtocolloApertura:
+           type: string
+        idTipoVeicolo:
+           type: integer
+           format: int64
+        idTipoAgevolazione:
+           type: integer
+           format: int64           
+        
+  #it.csi.stacore.staon.business.bo           
+  EventoVO:
+    type: object
+    description: Evento
+    properties:
+      dataEvento:
+        type: string
+        format: date
+        description: data evento
+      tipoEvento:
+        $ref: '#/definitions/TipoEventoVO'
+        
+  #it.csi.stacore.staon.business.bo      
+  TipoEventoVO:
+    type: object
+    description: Evento
+    properties:
+      id:
+        type: integer
+        format: int32
+        example: id Tipo Evento
+      codice:
+        type: string
+        description: Codice evento
+      descrizione:
+        type: string
+        description: Descrizione evento
+  
+  ProprietarioVO:
+    type: object
+    description: Entità che definisce il soggetto proprietario di un veicolo
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: pk proprietario
+      idGms:
+        type: integer
+        format: int64
+        description: id GMS
+      personaFisica:
+        type: boolean
+        description: se true si tratta di una persona fisica, altrimenti giuridica
+      identificativoFiscale:
+        type: string
+        description: CF/PI
+      indirizzoResidenza:
+        $ref: '#/definitions/IndirizzoVO'
+        description: indirizzo
+      proprietarioPG:
+        $ref: '#/definitions/ProprietarioPGVO'
+        description: proprietario persona giuridica
+      proprietarioPF:
+        $ref: '#/definitions/ProprietarioPFVO'
+        description: proprietario persona giuridica
+      dataValidita:
+        type: string
+        format: date
+        
+  ProprietarioPGVO:
+    type: object
+    description: Entità che definisce gli attributi afferenti alla persona giuridica
+    properties:
+      denominazione:
+        type: string
+        description: Denominazione Impresa
+      ragioneSociale:
+        type: string
+        description: Ragione Sociale impresa
+      dataCostituzione:
+        type: string
+        format: date
+      naturaGiuridica:
+        $ref: '#/definitions/NaturaGiuridicaVO'
+        description: natura giuridica impresa 
+      attivita:
+        $ref: '#/definitions/AttivitaVO'
+        description: attività impresa
+         
+  ProprietarioPFVO:
+    type: object
+    description: Entità che definisce gli attributi afferenti alla persona fisica
+    properties:
+      nome:
+        type: string
+      cognome:
+        type: string
+      sesso:
+        type: string
+      dataNascita:
+        type: string
+        format: date
+      luogoNascita:
+        $ref: '#/definitions/LuogoVO'
+        description: Luogo Nascita
+        
+  IndirizzoVO:
+    type: object
+    description: Indirizzo
+    properties:
+      luogoNazionale:
+        type: boolean
+      tipoIndirizzo:
+        $ref: '#/definitions/TipoIndirizzoVO'
+        description: Tipo Indirizzo
+      via:
+        $ref: '#/definitions/ViaVO'
+        description: Via
+      civico:
+        $ref: '#/definitions/CivicoVO'
+        description: Il Civico
+      cap:
+        type: string
+        description: il CAP
+      comune:
+        $ref: '#/definitions/ComuneVO'
+      provincia:
+        $ref: '#/definitions/ProvinciaVO'  
+      regione:
+        $ref: '#/definitions/RegioneVO' 
+      fonteProvenienza:
+        type: string
+        description: Fonte provenienza
+      fonteRiferimento:
+        type: string
+        description: Fonte riferimento
+      dataValidita:
+        type: string
+        format: date
+        
+  NaturaGiuridicaVO:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      descrizione:
+        type: string
+      dataInizioValidita:
+        type: string
+        format: date
+      dataFineValidita:
+        type: string
+        format: date
+        
+  AttivitaVO:
+    type: object
+    properties:
+      codiceAteco:
+        type: string
+      categoria:
+        type: string
+        
+  ViaVO:
+    type: object
+    description: Via
+    properties:
+      sedime:
+        type: string
+        description: Sedime
+      nomeVia:
+        type: string
+        description: nomeVia
+      valoreCompleto:
+        type: string
+        description: valoreCompleto
+        
+  CivicoVO:
+    type: object
+    description: Civico
+    properties:
+      radice:
+        type: integer
+        format: int32
+        description: radice 
+      stringaCivico:
+        type: string
+        description: civico in formato stringa
+        
+  TipoIndirizzoVO:
+    type: object
+    description: Tipo Indirizzo
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: id tipo indirizzo 
+      descrizione:
+        type: string
+        description: descrizione tipo indirizzo
+        
+  ComuneVO:
+    type: object
+    description: Comune
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: pd comune 
+      istat:
+        type: string
+        description: istat comune
+      descrizione:
+        type: string
+        description: descrizione comune
+      descrizioneEstesa:
+        type: string
+        description: descrizione comune
+      capRiferimento:
+        type: string
+        description: cap riferimento
+      provincia:
+        type: string
+        description: provincia
+      codiceCatastale:
+        type: string
+        description: codice catastale
+        
+  ProvinciaVO:
+    type: object
+    description: Provincia
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: id provincia
+      istat:
+        type: string
+        description: istat provincia
+      descrizione:
+        type: string
+      sigla:
+        type: string
+  
+  #Classe che mergia anche l'output di loadRegioneByCodice      
+  RegioneVO:
+    type: object
+    description: Regione
+    properties:
+      id_regione:
+        type: integer
+        format: int64
+        description: id_regione utilizzato in loadRegioneByCodice
+      codice:
+        type: string
+        description: codice utilizzato in loadRegioneByCodice
+      istat:
+        type: string
+        description: istat
+      descrizione:
+        type: string
+        
+  LuogoVO:
+    type: object
+    description: Luogo
+    properties:
+      comune:
+        $ref: '#/definitions/ComuneVO'
+        description: Comune
+      idNazione:
+        type: integer
+        format: int64
+        description: id nazione
+      nazione:
+        type: string
+        description: nazione
+  
+  DecodificaVO:
+    type: object
+    description: Decodifica
+    properties:
+      idDecodifica:
+        type: integer
+        format: int64
+      descrizione:
+        type: string
+      codice:
+        type: string        
+  
+  TipoVeicolo:
+    type: string    
+    enum: &TipoVeicolo 
+       - CODICE_AUTOVEICOLO               # -> "A"
+       - CODICE_MOTOVEICOLO               # -> "M"
+       - CODICE_RIMORCHIO                 # -> "R"
+       - CODICE_CICLOMOTORE               # -> "C"
+       - CODICE_QUADRICICLO_LEGGERO       # -> "Q"
+       - CODICE_TARGA_PROVA_AUTOVEICOLO   # -> "PA"
+       - CODICE_TARGA_PROVA_MOTOVEICOLO   # -> "PM"
+       - CODICE_TARGA_PROVA_RIMORCHIO     # -> "PR"
+       - CODICE_TARGA_PROVA_CICLOMOTORE   # -> "PC"
+       - CODICE_TARGA_PROVA_QUADRICICLO_LEGGERO   # -> "PQ"
+       - CODICE_TARGA_PROVA_AUTOSCAFO             # -> "PS"
+       - CODICE_TARGA_PROVA_MOTORE_FUORIBORDO     # -> "MF"
+  
+  TipoVeicoloVO:
+    type: object
+    description: Tipo Veicolo
+    properties:
+      decodifica:
+        type: object
+        $ref: '#/definitions/DecodificaVO'     
+  
+  Fonte:
+    type: string    
+    enum: &Fonte 
+       - CODICE_DTT   # -> "DTT"
+       - CODICE_PRA   # -> "PRA"
+       - CODICE_RIV   # -> "RIV"
+       - CODICE_SGATA # -> "SGATA"
+       - CODICE_POSTE # -> "POSTE"
+       - CODICE_RISC  # -> "RISC"
+       - CODICE_REG   # -> "REG"
+       - CODICE_NN    # -> "NN"
+                      
+  FonteVO:
+    type: object
+    description: Fonte
+    properties:
+      decodifica:
+        type: object
+        $ref: '#/definitions/DecodificaVO'
+        
+  TipoAgevolazione:
+    type: string    
+    enum: &TipoAgevolazione 
+       - SOSPENSIONE                             # -> "0"
+       - ESENZIONE_PRESIDENTE_DELLA_REPUBBLICA   # -> "1"
+       - ESENZIONE_AUTOSCAFO_ADIBITO_A_PESCA     # -> "2"
+       - ESENZIONE_VEICOLO_HANDICAP              # -> "3"
+       - ESENZIONE_VEICOLO_STORICO               # -> "4"
+       - PERDITA_POSSESSO_PER_FURTO              # -> "5"
+       - PERDITA_POSSESSO_PROVVEDIMENTO_GIUDIZIARIO   # -> "6"
+       - AUTOBUS_ALISCAFO_SERVIZIO_POSTALE            # -> "7"
+       - AUTOCARRI_AUTOSCAFI_ESTINZIONE_INCENDI       # -> "8"
+       - TRASPORTO_PERSONE_PER_CURE_MEDICHE           # -> "9"
+       - SOSPENSIONE_PER_FALLIMENTO                   # -> "10"
+       - SOSPENSIONE_EREDITA_GIACENTE                 # -> "11"
+       - DEAMBULAZIONE_INVALIDI                       # -> "A"
+       - TEMPORANEA_ESPORTAZIONE                      # -> "B"
+       - AGENTI_DIPLOMATICI_CONSOLARI                 # -> "C"
+       - ESENZIONI_PER_ECOINCENTIVI                   # -> "D"
+       - VEICOLI_ONLUS                                # -> "E"
+       - LR_22_2007_ART_11_INSTALLAZIONE_IMPIANTO_GAS # -> "N"
+       - LR_23_2003_ART_5_LETT_A                      # -> "O"
+       - LR_23_2003_ART_5_LETT_B_PROTEZIONE_CIVILE    # -> "P"
+       - LR_23_2003_ART_5_LETT_B_ESTINZIONE_INCENDI   # -> "Q"
+       - LR_23_2003_ART_5_LETT_C                      # -> "R"
+       - LR_23_2003_ART_5_LETT_D_AUTOBUS_PUBBLICO_DI_LINEA   # -> "S"
+       - LR_23_2003_ART_5_LETT_E_AMBULANZE_E_ASSIMILATI      # -> "T"
+       - LR_23_2003_ART_5_LETT_F_RIFIUTI                     # -> "U"
+       - LR_23_2003_ART_5_LETT_G_ELETTRICI                   # -> "V"
+       - LR_23_2003_ART_5_LETT_G_GPL_E_METANO                # -> "W"
+       - LR_23_2003_ART_5_LETT_H_ORGANIZZ_VOLUNTARIATO       # -> "X"
+       - LR_23_2003_ART_5_LETT_H_COOPERATIVE_SOCIALI         # -> "Y"
+       - LR_23_2003_ART_5_LETT_H_IPAB                        # -> "Z"
+       - PATENTE_SPECIALE                                    # -> "M"
+       - B_POWER                                             # -> "67"
+       - GPL_METANO_ELETTRICI_ESCLUSIVI                      # -> "68"
+       - IBRIDI                                              # -> "71"
+       - ESENZIONE_ESTINZIONE_INCENDI                        # -> "74"
+       - ESENZIONE_AUTOBUS_IN_SERVIZIO_DI_LINEA              # -> "75"
+       - ESENZIONE_AMBULANZE                                 # -> "76"
+       - ESENZIONE_ATTI_AL_CARICO_SCARICO                    # -> "77"
+      
+  TipoAgevolazioneVO:
+    type: object
+    description: TipoAgevolazione
+    properties:
+      decodifica:
+        type: object
+        $ref: '#/definitions/DecodificaVO'     
+  
+  AgevolazioneVO:
+    type: object
+    description: Agevolazione
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: id agevolazione
+      idVeicolo:
+        type: integer
+        format: int64
+        description: id veicolo
+      tipoVeicolo:
+        type: object                
+        $ref: '#/definitions/TipoVeicoloVO'
+      fonte:
+        type: object                
+        $ref: '#/definitions/FonteVO'
+      tipoAgevolazione:
+        type: object                
+        $ref: '#/definitions/TipoAgevolazioneVO'
+      dataInizio:
+        type: string
+        format: date
+      numProtocolloApertura:
+        type: string
+      dataFine:
+        type: string
+        format: date
+      numProtocolloChiusura:
+        type: string
+      tipoVeicoloOriginale:
+        type: string
+      targaOriginale:
+        type: string
+      identificativoFiscaleProprietarioOriginale:
+        type: string
+      tipoAgevolazioneOriginale:
+        type: string
+      dataAcquisizione:
+        type: string
+        format: date
+      numeroPatente:
+        type: string
+      dataScadenzaPatente:
+        type: string
+        format: date
+      flagRicercaAg:
+        type: boolean
+      idDatiTecnici:
+        type: integer
+        format: int64
+        description: id dati tecnici
+      idOperazioneLogica:
+        type: integer
+        format: int64
+      idOperazione:
+        type: integer
+        format: int64
+      prorogaEuro6:
+        type: string
+  
+  DestinazioneVeicolo:
+    type: string    
+    enum: &DestinazioneVeicolo 
+       - CODICE_AUTOVEICOLO_IN_SERVIZIO_PUBBLICO_DI_LINEA_INTEGRATIVO   # -> "7"
+       - CODICE_AUTOVEICOLO_USO_ESCLUSIVO_DI_POLIZIA                    # -> "8"
+       - CODICE_AUTOVETTURA_PER_TRASPORTO_DI_PERSONE                    # -> "A"
+       - CODICE_AUTOBUS_PER_TRASPORTO_DI_PERSONE                        # -> "B"
+       - CODICE_AUTOCARRO_PER_TRASPORTO_DI_COSE                         # -> "C"
+       - CODICE_AUTOCARAVAN                                             # -> "I"
+       - CODICE_AUTOVEICOLO_PER_USO_SPECIALE                            # -> "L"
+       - CODICE_TRAS_SPECIFICO_PERSONE_PART_CONDIZIONI                  # -> "O"
+       - CODICE_AUTOVEICOLO_TRASPORTO_PROMISCUO_PERSONE_COSE            # -> "P"
+       - CODICE_TRATTORE_STRADALE_PER_RIMORCHIO                         # -> "S"
+       - CODICE_TRATTORE_PER_SEMIRIMORCHIO                              # -> "T"
+       - CODICE_AUTOVEICOLO_PER_TRASPORTO_SPECIFICO                     # -> "V"
+       - CODICE_QUADRICICLO_PER_TRASP_DI_PERSONE                        # -> "3"
+       - CODICE_QUADRICICLO_PER_TRASP_DI_COSE                           # -> "4"
+       - CODICE_QUADRICICLO_PER_USO_SPECIALE                            # -> "5"
+       - CODICE_QUADRICICLO_TRASP_SPECIFICO                             # -> "6"
+       - CODICE_MOTOVEICOLO_USO_ESCLUSIVO_DI_POLIZIA                    # -> "9"
+       - CODICE_TRICICLO_PER_TRASPORTO_PROMISCUO                        # -> "D"
+       - CODICE_TRICICLO_PER_USO_SPECIALE                               # -> "F"
+       - CODICE_TRICICLO_PER_TRASPORTO_SPECIFICO                        # -> "G"
+       - CODICE_MOTOCICLO_PER_TRASPORTO_PERSONE                         # -> "M"
+       - CODICE_TRICICLO_PER_TRASPORTO_COSE                             # -> "N"
+       - CODICE_TRICICLO_PER_TRASPORTO_DI_PERSONE                       # -> "Z"
+       - CODICE_SEMIRIMORCHIO_PER_TRASPORTO_SPECIFICO                   # -> "E"
+       - CODICE_SEMIRIMORCHIO_PER_TRASPORTO_COSE                        # -> "H"
+       - CODICE_RIMORCHIO_PER_TRASPORTO_ATTREZZATURE_TURISTICHE_E_SPORTIVE   # -> "J"
+       - CODICE_RIMORCHIO_PER_TRASPORTI_SPECIFICI                            # -> "K"
+       - CODICE_SEMIRIMORCHIO_PER_TRASPORTO_PERSONE                          # -> "Q"
+       - CODICE_RIMORCHIO_PER_TRASPORTO_COSE                                 # -> "R"
+       - CODICE_CARAVAN                                                      # -> "U"
+       - CODICE_RIMORCHIO_PER_TRASPORTO_PERSONE                              # -> "W"
+       - CODICE_RIMORCHIO_PER_USO_SPECIALE                                   # -> "X"
+       - CODICE_SEMIRIMORCHIO_PER_USO_SPECIALE                               # -> "Y"
+  
+  DestinazioneVeicoloVO:
+    type: object
+    description: Destinazione Veicolo
+    properties:
+       decodifica:
+          type: object
+          $ref: '#/definitions/DecodificaVO'       
+  
+  UsoVeicolo:
+    type: string    
+    enum: &UsoVeicolo 
+       - CODICE_PROPRIO                        # -> "0"
+       - CODICE_TERZI_DA_NOLEGGIO_CON_CONDUC   # -> "1"
+       - CODICE_TERZI_DA_LOCARE_SENZA_CONDUC   # -> "2"
+       - CODICE_DI_TERZI                       # -> "3"
+       - CODICE_PROPRIO_4                      # -> "4"
+       - CODICE_PROPRIO_5                      # -> "5"
+       - CODICE_DI_TERZI_CON_AUTORIZZAZIONI_VINCOLATE   # -> "6"
+       - CODICE_DI_TERZI_CON_AUTORIZZAZIONE_LIBERA      # -> "7"
+       - CODICE_USO_SPECIALE                            # -> "8"
+       - CODICE_PRIV_LOCAZIONE_FAC_COMPERA              # -> "9"
+  
+  #it.csi.stacore.staon.business.bo
+  UsoVeicoloVO:
+    type: object
+    description: Uso Veicolo
+    properties:
+       decodifica:
+          type: object
+          $ref: '#/definitions/DecodificaVO'       
+  
+  Carrozzeria:
+    type: string    
+    enum: &Carrozzeria 
+       - CODICE_CARRELLO_TRASPORTO_VEICOLI_FERROVIARI   # -> "C1"
+       - CODICE_RIMORCHIO_TRASPORTO_IMBARCAZIONI        # -> "C2"
+       - CODICE_AUTOVETTURA_SCUOLA_GUIDA                # -> "C3"
+       - CODICE_AUTOVEICOLO_TRASPORTO_LATTE             # -> "C4"
+       - CODICE_AUTOVEICOLO_TRASPORTO_CARNI_MACELLATE   # -> "C5"
+       - CODICE_AUTOVEICOLO_RSU                         # -> "C6"
+       - CODICE_AUTOVEICOLO_TRASPORTO_GENERI_MONOPOLIO  # -> "C7"
+       - CODICE_AUTOVEICOLO_BOTTE_VUOTATURA_POZZI_NERI  # -> "C8"
+       - CODICE_AMBULANZA                               # -> "C9"
+       - CODICE_AUTOVEICOLO_ESTINZIONE_INCENDI          # -> "C10"
+       - CODICE_AUTOCARRO_KW                            # -> "F0"
+       
+  #it.csi.stacore.staon.business.bo     
+  CarrozzeriaVO:
+    type: object
+    description: Carrozzeria
+    properties:
+       decodifica:
+          type: object
+          $ref: '#/definitions/DecodificaVO'       
+  
+  Combustibile:
+    type: string    
+    enum: &Combustibile 
+       - BENZ      # -> "B"
+       - CODICE_B_OLIO    # -> "B-O"
+       - CODICE_B_WANK    # -> "B-W"
+       - CODICE_ELETTR    # -> "ELE"
+       - CODICE_GASOL     # -> "G"
+       - CODICE_GPL       # -> "GP"
+       - CODICE_B_GPL     # -> "GPL"
+       - CODICE_B_MET     # -> "M"
+       - CODICE_METANO    # -> "ME"
+       - CODICE_MISCELA   # -> "MSC"
+       - CODICE_PETROLIO  # -> "P"
+       - CODICE_BENZINA_ELETTRICO # -> "B-E"
+       - CODICE_GASOL_ELETTRICO   # -> "G-E"
+       - CODICE_BENZINA_ETANOLO   # -> "BET"
+       - CODICE_GASOLIO_METANO    # -> "G-M"
+       - CODICE_GASOLIO_GPL       # -> "G-G"
+       - CODICE_GASOLIO_GAS_NATURALE_LIQUEFATTO   # -> "GML"
+       - CODICE_GAS_NATURALE_LIQUEFATTO           # -> "GNL"
+       - CODICE_IDROGENO                          # -> "H"
+       - CODICE_IDROGENO_ELETTRICO                # -> "H-E"
+       
+  #it.csi.stacore.staon.business.bo     
+  CombustibileVO:
+    type: object
+    description: Combustibile
+    properties:
+       decodifica:
+          type: object
+          $ref: '#/definitions/DecodificaVO'
+       idGruppoAlimentazione:
+          type: integer
+          format: int64
+          
+  CategoriaEuro:
+    type: string
+    format: string    
+    enum: &CategoriaEuro 
+       - CODICE_NON_DEFINITO   # -> "NN"
+       - CODICE_EURO_0         # -> "E0"
+       - CODICE_EURO_1         # -> "E1"
+       - CODICE_EURO_2         # -> "E2"
+       - CODICE_EURO_3         # -> "E3"
+       - CODICE_EURO_4         # -> "E4"
+       - CODICE_EURO_5         # -> "E5"
+       - CODICE_EURO_6         # -> "E6"       
+  
+  #it.csi.stacore.staon.business.bo
+  CategoriaEuroVO:
+    type: object
+    description: CategoriaEuro
+    properties:
+       decodifica:
+          type: object
+          $ref: '#/definitions/DecodificaVO'       
+  
+  #it.csi.stacore.staon.business.bo      
+  DatiTecniciVO:
+    type: object
+    description: DatiTecnici
+    properties:
+       id:
+          type: integer
+          format: int64
+          description: id dato tecnico
+       eventoInizio:
+          type: object
+          $ref: '#/definitions/EventoVO'
+       eventoFine:
+          type: object
+          $ref: '#/definitions/EventoVO'
+       targa:
+          type: string
+       scadenzaAttribuita:
+          type: integer
+          format: int32
+       destinazione:
+          type: object
+          $ref: '#/definitions/DestinazioneVeicoloVO'
+       uso:
+          type: object
+          $ref: '#/definitions/UsoVeicoloVO'
+       trasportoMerci:
+          type: string
+       carrozzeria:
+          type: object
+          $ref: '#/definitions/CarrozzeriaVO'
+       massaComplessiva:
+          type: string
+       kiloWatt:
+          type: number
+       portata:
+          type: integer
+          format: int32
+       alimentazione:
+          type: object
+          $ref: '#/definitions/CombustibileVO'
+       hasSospensionePneum:
+          type: boolean
+       numPosti:
+          type: integer
+          format: int32
+       numAssi:
+          type: integer
+          format: int32
+       potenzaFiscale:
+          type: integer
+          format: int32
+       cilindrata:
+          type: integer
+          format: int32
+       isEcoDiesel:
+          type: boolean
+       isGancioPresente:
+          type: boolean
+       massaRimorchiabile:
+          type: integer
+          format: int32
+       isRimorchiabile:
+          type: boolean
+       categoriaEuro:
+          type: object
+          $ref: '#/definitions/CategoriaEuroVO'
+       isImpiantoAGas:
+          type: boolean
+       emissioneCO2:
+          type: string
+       dataInstallazioneGas:
+          type: string
+          format: date
+       dataCollaudoGas:
+          type: string
+          format: date
+       alimentazioneImpiantoGas:
+          type: object
+          $ref: '#/definitions/CombustibileVO'
+       dataDisinstallazioneGas:
+          type: string
+          format: date        
+        
+  VeicoloVO:
+    type: object
+    description: Veicolo
+    properties:
+       id:
+          type: integer
+          format: int64
+          description: id veicolo
+       tipoVeicolo:
+          type: object
+          $ref: '#/definitions/TipoVeicoloVO'
+       telaio:
+          type: string
+       dataUltimaRevisione:
+          type: string
+          format: date
+       storicoDatiTecnici:
+          type: array
+          items:
+            type: object              
+            $ref: '#/definitions/DatiTecniciVO'
+       flagRicercaAg:
+          type: boolean
+       idDatiTecnici:
+          type: integer
+          format: int64
+          description: id dati tecnici
+       nuovoIdDatiTecnici:
+          type: integer
+          format: int64
+          description: nuovo id dati tecnici
+        
+  PosizioneExtVO:
+    type: object
+    description: Posizione Ext
+    properties:    
+      posizione:
+        type: object                
+        $ref: '#/definitions/PosizioneVO'
+      proprietario:
+        type: object                
+        $ref: '#/definitions/ProprietarioVO'
+      veicolo:
+        type: object                
+        $ref: '#/definitions/VeicoloVO'
+      idComunicazione:
+        type: string
+  
+  UtenteVO:
+    type: object
+    description: Utente
+    properties:
+      nome:
+        type: string
+        description: Nome Utente
+              
+  GenericResponse:
+    type: object
+    description: Risposta di un servizio generico
+    properties:
+      message:
+        type: string
+        description: Contiene il messaggio eventuale del servizio chiamato
+        example: 'Servizio ha risposto correttamente'
+  ErrorDto:
+    type: object
+    description: Rappresenta l'errore restituito da servizio
+    properties:
+      status:
+        type: integer
+        description: status http restituito
+        example: '500, 400, ecc'
+      code:
+        type: string
+        description: code http restituito
+        example: 'Internal server error, ecc'
+      description:
+        type: string
+        description: la descrizione dell'errore
+        example: 'Internal server error, ecc'
+      errorDetails:
+        type: array
+        description: i dettagli errore
+        items:
+          $ref: '#/definitions/ErrorDetail'
+  ErrorDetail:
+    type: object
+    description: rappresenta il dettaglio errore restituito in caso di errori di validazione sui campi di input
+    properties:
+      field:
+        type: string
+        description: il nome del campo per cui è falita la validazione
+        example: 'name, surname'
+      error:
+        type: string
+        description: l'errore di validazione effettivo
+        example: 'campo obbligatorio, ecc'
+      description:
+        type: string
+        description: la descrizione dell'errore
+        example: 'Internal server error, ecc'
+  TestModel:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+    description: Entità di test
+# Added by API Auto Mocking Plugin
+basePath: /andreafontanelli/stacoresrv/1.0.0
+schemes:
+ - https
+ - http

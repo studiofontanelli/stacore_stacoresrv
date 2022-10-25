@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "cc209278-ea46-4c8e-b949-802799954c1e",
-		"name": "TEST PLAN - STADATITRASVSRV",
+		"name": "TEST PLAN - STACORESRV",
 		"description": "API REST Componente stacoresrv",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "3823498"
