@@ -62,12 +62,10 @@ paths:
       responses:
         200:
           schema:
-            $ref: '#/definitions/EsitoCalcolaRimborso'
+            $ref: '#/definitions/EsitoCalcolaRimborsoVO'
           description: OK
         400:
           description: "Parametro non valorizzato"
-        404:
-          description: "Comune non trovato"
         500:
           description: Internal server error
           schema:
@@ -109,37 +107,92 @@ definitions:
         type: string
         description: >
           Il codice tipo veicolo (A = Autoveicolo, M= Motoveicolo, ecc )
+      tipo_compensazione:
+        type: string
+        description: >
+          Il codice tipo compensazione
+        example: P= ROTTAMAZIONE CON PERMUTA
       data_scadenza:
+        type: string
+        description: >
+          la data di scadenza nel formato YYYYMM    
+        example: 202212
+      data_evento_chiusura:
         type: string
         format: date
         description: >
-          la data di scadenza nel formato DD-MM-YYYY    
-        example: 15-08-2022
+          la data evento chiusura nel formato YYYY-MM_DD  
+        example: esempio di data evento chiusura 2017-07-21   
       mesi_validita:
         type: integer
         description: i mesi di validità ( 12 per validità annuale)
-      data_riferimento:
+   
+  DatiCalcoloRimborsoNonGodutoVO:
+    type: object
+    description: Oggetto utilizzato per calcolare il rimborso
+    properties:
+      targa:
         type: string
-        format: date
         description: >
-          la data di riferimento nel formato DD-MM-YYYY    
-        example: 15-08-2022  
-  EsitoCalcolaRimborso:
+          la targa del veicolo
+      tipo_veicolo:
+        type: string
+        description: >
+          Il codice tipo veicolo (A = Autoveicolo, M= Motoveicolo, ecc )
+      data_scadenza:
+        type: string
+        description: >
+          la data di scadenza nel formato YYYYMM    
+        example: 202212
+      mesi_validita:
+        type: integer
+        format: int32
+        description: i mesi di validità ( 12 per validità annuale)
+  
+  EsitoCalcoloRimborsoVO:
     type: object
     description: Il risultato ottenuto dal calcola rimborso
     properties:
-      denomonazione:
-        type: string
-        description: >
-          il nome della nazione
-        example: 'FRANCIA'
+      importo_totale_dovuto:
+        type: object
+        $ref: '#/definitions/ValutaVO' 
+      importo_totale_pagato:
+        type: object
+        $ref: '#/definitions/ValutaVO' 
+      cifra_da_rimborsare:
+        type: object
+        $ref: '#/definitions/ValutaVO'
       data_ultimo_giorno_utile_pagamento:
         type: string
         format: date
         description: >
-          la data ultimo giorno utile pagamento nel formato DD-MM-YYYY    
-        example: 15-08-2022
-  
+          la data ultimo giorno utile pagamento nel formato YYYY-MM-DD
+        example: 2017-07-21
+  EsitoCalcoloRimborsoNonGodutoVO:
+    type: object
+    description: Il risultato ottenuto dal calcola rimborso
+    properties:
+      importo_totale_dovuto:
+        type: object
+        $ref: '#/definitions/ValutaVO' 
+      importo_totale_pagato:
+        type: object
+        $ref: '#/definitions/ValutaVO' 
+      importo_totale_eccedente:
+        type: object
+        $ref: '#/definitions/ValutaVO'
+      importo_totale_non_goduto:
+        type: object
+        $ref: '#/definitions/ValutaVO'
+      data_ultimo_giorno_utile_pagamento:
+        type: string
+        format: date
+        description: >
+          la data ultimo giorno utile pagamento nel formato YYYY-MM-DD
+        example: 2017-07-21
+      mensilita:
+        type: integer
+        format: int32
   
   VincoliRicercaBonusVO:
      type: object

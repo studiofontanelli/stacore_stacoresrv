@@ -1,6 +1,7 @@
 package it.csi.stacore.stacoresrv.business.helper.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -10,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.csi.stacore.stacoresrv.api.dto.DatiCalcoloRimborsoVO;
-import it.csi.stacore.stacoresrv.api.dto.EsitoCalcolaRimborso;
+import it.csi.stacore.stacoresrv.api.dto.EsitoCalcoloRimborsoVO;
 import it.csi.stacore.stacoresrv.business.adapter.DatiCalcoloRimborsoVOAdapter;
+import it.csi.stacore.stacoresrv.business.adapter.EsitoCalcoloRimborsoAdapter;
 import it.csi.stacore.stacoresrv.business.dto.ErrorDetailDto;
 import it.csi.stacore.stacoresrv.business.exception.HelperException;
 import it.csi.stacore.stacoresrv.business.exception.ValidationException;
@@ -34,6 +36,9 @@ public class RimborsiHelperImpl extends CommonHelperImpl implements RimborsiHelp
 	
 	@Autowired
 	private DatiCalcoloRimborsoVOAdapter datiCalcoloRimborsoVOAdapter;
+	
+	@Autowired
+	private EsitoCalcoloRimborsoAdapter esitoCalcoloRimborsoAdapter;
 
 	@PostConstruct
 	public void init() {
@@ -60,7 +65,7 @@ public class RimborsiHelperImpl extends CommonHelperImpl implements RimborsiHelp
 	
 
 	@Override
-	public EsitoCalcolaRimborso calcolaRimborso(DatiCalcoloRimborsoVO datiCalcoloVO) throws HelperException {
+	public EsitoCalcoloRimborsoVO calcolaRimborso(DatiCalcoloRimborsoVO datiCalcoloVO) throws HelperException {
 		final String method = "calcolaRimborso";
 		try {
 			List<ErrorDetailDto> errors = new ArrayList<>();
@@ -77,6 +82,15 @@ public class RimborsiHelperImpl extends CommonHelperImpl implements RimborsiHelp
 			if(datiCalcoloVO.getDataScadenza() == null) {
 				errors.add(new ErrorDetailDto("data_scadenza", "data scadenza non valorizzata"));
 			}
+			else {
+				try {
+					Date dataScadenza = DateUtil.parse(datiCalcoloVO.getDataScadenza(), DateUtil.YEAR_MONTH_NO_SEPARATOR);
+				}
+				catch(Exception e) {
+					Tracer.error(LOG, getClass().getName(), method, "Errore nel parsing della data scadenza "  + datiCalcoloVO.getDataScadenza());
+					errors.add(new ErrorDetailDto("data_scadenza", "il formato data deve essere " + DateUtil.YEAR_MONTH_NO_SEPARATOR));
+				}
+			}
 			if(datiCalcoloVO.getMesiValidita() == null) {
 				errors.add(new ErrorDetailDto("mesi_validita", "mesi validita non valorizzato"));
 			}
@@ -87,7 +101,7 @@ public class RimborsiHelperImpl extends CommonHelperImpl implements RimborsiHelp
 			DatiCalcolo datiCalcolo =  datiCalcoloRimborsoVOAdapter.convertFrom(datiCalcoloVO);
 					
 					
-			Utente utente = 	UtenteFactory.getInstance().buildByIdentificativoFiscale("AAAA");	
+			Utente utente = UtenteFactory.getInstance().buildByIdentificativoFiscale("AAAA");	
 					
 			
 			EsitoCalcoloRimborso e = servizioRimborsi.calcolaRimborso(datiCalcolo, utente);
@@ -95,8 +109,7 @@ public class RimborsiHelperImpl extends CommonHelperImpl implements RimborsiHelp
 			Tracer.debug(LOG, getClass().getName(), method, "EsitoCalcoloRimborso\n "  +XmlSerializer.objectToXml(e));
 			
 			
-			EsitoCalcolaRimborso esito = new EsitoCalcolaRimborso();
-			esito.setDataUltimoGiornoUtilePagamento(DateUtil.getCurrentDate());
+			EsitoCalcoloRimborsoVO esito = esitoCalcoloRimborsoAdapter.convertTo(e);
 			
 			return esito;
 		}

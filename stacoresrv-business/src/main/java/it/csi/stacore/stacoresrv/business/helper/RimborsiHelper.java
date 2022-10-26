@@ -1,7 +1,7 @@
 package it.csi.stacore.stacoresrv.business.helper;
 
 import it.csi.stacore.stacoresrv.api.dto.DatiCalcoloRimborsoVO;
-import it.csi.stacore.stacoresrv.api.dto.EsitoCalcolaRimborso;
+import it.csi.stacore.stacoresrv.api.dto.EsitoCalcoloRimborsoVO;
 import it.csi.stacore.stacoresrv.business.exception.HelperException;
 
 public interface RimborsiHelper {
@@ -16,7 +16,7 @@ public interface RimborsiHelper {
 	 * @return
 	 * @throws HelperException
 	 */
-	public EsitoCalcolaRimborso calcolaRimborso(DatiCalcoloRimborsoVO datiCalcolo )throws HelperException;
+	public EsitoCalcoloRimborsoVO calcolaRimborso(DatiCalcoloRimborsoVO datiCalcolo )throws HelperException;
 	
 	
 	

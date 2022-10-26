@@ -3,27 +3,19 @@
  **********************************************/
 package it.csi.stacore.stacoresrv.api.service;
 
-import it.csi.stacore.stacoresrv.api.dto.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import io.swagger.annotations.ApiParam;
-import io.swagger.jaxrs.*;
-
 import it.csi.stacore.stacoresrv.api.dto.DatiCalcoloRimborsoVO;
 import it.csi.stacore.stacoresrv.api.dto.ErrorDto;
-import it.csi.stacore.stacoresrv.api.dto.EsitoCalcolaRimborso;
-
-import java.util.List;
-import java.util.Map;
-
-import java.io.InputStream;
-
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.HttpHeaders;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.*;
-import javax.validation.constraints.*;
+import it.csi.stacore.stacoresrv.api.dto.EsitoCalcoloRimborsoVO;
 
 @Path("/rimborsi")
 
@@ -36,9 +28,9 @@ public interface RimborsiApi  {
     @Path("/calcola")
     @Consumes({ "application/json" })
     @Produces({ "application/json" })
-    @io.swagger.annotations.ApiOperation(value = "", notes = "Effettua il calcolo del rimborso ", response = EsitoCalcolaRimborso.class, tags={ "rimborsi", })
+    @io.swagger.annotations.ApiOperation(value = "", notes = "Effettua il calcolo del rimborso ", response = EsitoCalcoloRimborsoVO.class, tags={ "rimborsi", })
     @io.swagger.annotations.ApiResponses(value = { 
-        @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = EsitoCalcolaRimborso.class),
+        @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = EsitoCalcoloRimborsoVO.class),
         
         @io.swagger.annotations.ApiResponse(code = 400, message = "Parametro non valorizzato", response = Void.class),
         

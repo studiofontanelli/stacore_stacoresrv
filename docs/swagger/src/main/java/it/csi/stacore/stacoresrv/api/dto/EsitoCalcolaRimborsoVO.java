@@ -13,7 +13,7 @@ import io.swagger.annotations.*;
 
 @ApiModel(description="Il risultato ottenuto dal calcola rimborso")
 
-public class EsitoCalcolaRimborso  implements Serializable {
+public class EsitoCalcolaRimborsoVO  implements Serializable {
   // verra' utilizzata la seguente strategia serializzazione degli attributi: [explicit-as-modeled] 
   private static final long serialVersionUID = 1L;
   
@@ -84,11 +84,11 @@ public class EsitoCalcolaRimborso  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EsitoCalcolaRimborso esitoCalcolaRimborso = (EsitoCalcolaRimborso) o;
-    return Objects.equals(importoTotaleDovuto, esitoCalcolaRimborso.importoTotaleDovuto) &&
-        Objects.equals(importoTotalePagato, esitoCalcolaRimborso.importoTotalePagato) &&
-        Objects.equals(cifraDaRimborsare, esitoCalcolaRimborso.cifraDaRimborsare) &&
-        Objects.equals(dataUltimoGiornoUtilePagamento, esitoCalcolaRimborso.dataUltimoGiornoUtilePagamento);
+    EsitoCalcolaRimborsoVO esitoCalcolaRimborsoVO = (EsitoCalcolaRimborsoVO) o;
+    return Objects.equals(importoTotaleDovuto, esitoCalcolaRimborsoVO.importoTotaleDovuto) &&
+        Objects.equals(importoTotalePagato, esitoCalcolaRimborsoVO.importoTotalePagato) &&
+        Objects.equals(cifraDaRimborsare, esitoCalcolaRimborsoVO.cifraDaRimborsare) &&
+        Objects.equals(dataUltimoGiornoUtilePagamento, esitoCalcolaRimborsoVO.dataUltimoGiornoUtilePagamento);
   }
 
   @Override
@@ -99,7 +99,7 @@ public class EsitoCalcolaRimborso  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EsitoCalcolaRimborso {\n");
+    sb.append("class EsitoCalcolaRimborsoVO {\n");
     
     sb.append("    importoTotaleDovuto: ").append(toIndentedString(importoTotaleDovuto)).append("\n");
     sb.append("    importoTotalePagato: ").append(toIndentedString(importoTotalePagato)).append("\n");

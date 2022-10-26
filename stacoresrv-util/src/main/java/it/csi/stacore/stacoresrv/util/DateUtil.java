@@ -1,6 +1,7 @@
 package it.csi.stacore.stacoresrv.util;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -8,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,7 +24,7 @@ public class DateUtil {
 
 	public static final String RFC_FORMAT = "dd-MM-yyyy";
 	public static final String RFC_NO_SEPARATOR_FORMAT = "yyyyMMdd";
-	
+
 	public static String format(Date d, String format) throws ParseException{
 		String data = null;
 		if(d == null)
@@ -31,37 +33,43 @@ public class DateUtil {
 			throw new ParseException("Formato data non valorizzato", 0);
 		}
 		try {
-			
+
 			Instant instant = d.toInstant();
 			ZonedDateTime zdt = instant.atZone( ZoneId.systemDefault() );
 			LocalDate localDate = zdt.toLocalDate();
-			
+
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
 			data = localDate.format(formatter);
-			
+
 		} catch (Exception e) {
 			throw new ParseException("Formato data non non corretto", 0);
 		}
 		return data;
-		
-		
+
+
 	}
 
 	public static Date parse(String d, String format) throws ParseException {
-		Date data = null;
+		Date date = null;
 		if(StringUtils.isBlank(d)) {
 			return null;
 		}
-		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-			LocalDate localDate = LocalDate.parse(d, formatter);
-			data = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		try {	
+			
+			
+			SimpleDateFormat formatter = new SimpleDateFormat(format, Locale.ITALIAN);
+
+			date = formatter.parse(d);
+			
+			
+		
+
 		} catch (Exception e) {
 			throw new ParseException("Formato data non corretto", 0);
 		}
-		return data;
+		return date;
 	}
-	
+
 	public static Date parse(String d) throws ParseException{
 		return parse(d, SIMPLE_FORMAT);
 	}
@@ -73,6 +81,6 @@ public class DateUtil {
 	public static Date getCurrentDate() {
 		return Calendar.getInstance().getTime();
 	}
-	
+
 
 }

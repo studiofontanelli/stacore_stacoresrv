@@ -170,7 +170,7 @@
 				url-pa="/ejb/stacore/staon/PA_ServizioDatiTrasversali">
 
 				<properties>
-					<property name="java.naming.provider.url" value="jnp://tst-spjbosscp09-01.self.csi.it:19516,tst-spjbosscp09-02.self.csi.it:19516" />
+					<property name="java.naming.provider.url" value="${staon.java.naming.provider.url}" />
 					<property name="java.naming.factory.initial" value="org.jnp.interfaces.NamingContextFactory" />
 					
 				</properties>

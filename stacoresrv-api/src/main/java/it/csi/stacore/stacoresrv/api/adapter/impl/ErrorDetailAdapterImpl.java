@@ -8,13 +8,14 @@ import it.csi.stacore.stacoresrv.api.adapter.ErrorDetailAdapter;
 import it.csi.stacore.stacoresrv.api.dto.ErrorDetail;
 import it.csi.stacore.stacoresrv.business.dto.ErrorDetailDto;
 import it.csi.stacore.stacoresrv.util.Tracer;
+import it.csi.stacore.stacoresrv.util.XmlSerializer;
 import it.csi.stacore.stacoresrv.util.adapter.CommonDtoAdapter;
 import it.csi.stacore.stacoresrv.util.adapter.exception.DtoConversionException;
 
 
 
 
-@Component
+@Component("errorDetailAdapter")
 public class ErrorDetailAdapterImpl extends CommonDtoAdapter<ErrorDetail, ErrorDetailDto> implements ErrorDetailAdapter {
 
 	/**
@@ -37,7 +38,11 @@ public class ErrorDetailAdapterImpl extends CommonDtoAdapter<ErrorDetail, ErrorD
 		
 		final String method = "convertFrom";
 		try {
+			Tracer.debug(LOG, getClass().getName(), method, "ErrorDetailDto\n " + XmlSerializer.objectToXml(v));
+			
+			//ErrorDetail errorDetail =  super.convertFrom(v);
 			ErrorDetail errorDetail =  super.convertFrom(v);
+			
 			return errorDetail;
 		}
 		catch(Exception e) {

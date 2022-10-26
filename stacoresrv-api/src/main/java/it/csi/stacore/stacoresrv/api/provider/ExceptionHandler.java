@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
 import it.csi.stacore.stacoresrv.api.adapter.ErrorDetailAdapter;
 import it.csi.stacore.stacoresrv.api.dto.ErrorDto;
@@ -21,6 +22,7 @@ import it.csi.stacore.stacoresrv.util.XmlSerializer;
 
 
 @Provider
+@Component
 public class ExceptionHandler implements ExceptionMapper<RuntimeException> {
 
 	private Logger LOG = LoggerFactory.getLogger(Constants.LOGGER_PREFIX);
@@ -40,10 +42,10 @@ public class ExceptionHandler implements ExceptionMapper<RuntimeException> {
 
 		if(exception instanceof ValidationException) {
 			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-			/*
-			if(((ValidationException)exception).getErrorDetails() != null)
-				e.setErrorDetails(errorDetailAdapter.convertFrom(((ValidationException)exception).getErrorDetails()));
-			*/
+			if(((ValidationException)exception).getErrorDetails() != null) {
+				ValidationException ve = ((ValidationException)exception) ;
+				e.setErrorDetails(errorDetailAdapter.convertFrom(ve.getErrorDetails()));
+			}
 		}
 		else if(exception instanceof UnauthorizedException) {
 			httpStatus = HttpStatus.UNAUTHORIZED;

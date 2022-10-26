@@ -1,7 +1,6 @@
 package it.csi.stacore.stacoresrv.api.dto;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,9 +16,8 @@ public class DatiCalcoloRimborsoVO  implements Serializable {
   
   private String targa = null;
   private String tipoVeicolo = null;
-  private Date dataScadenza = null;
+  private String dataScadenza = null;
   private Integer mesiValidita = null;
-  private Date dataRiferimento = null;
 
   /**
    * la targa del veicolo 
@@ -50,16 +48,16 @@ public class DatiCalcoloRimborsoVO  implements Serializable {
   }
 
   /**
-   * la data di scadenza nel formato DD-MM-YYYY     
+   * la data di scadenza nel formato YYYYMM     
    **/
   
-  @ApiModelProperty(example = "15-08-2022", value = "la data di scadenza nel formato DD-MM-YYYY     ")
+  @ApiModelProperty(example = "202212", value = "la data di scadenza nel formato YYYYMM     ")
   @JsonProperty("data_scadenza") 
  
-  public Date getDataScadenza() {
+  public String getDataScadenza() {
     return dataScadenza;
   }
-  public void setDataScadenza(Date dataScadenza) {
+  public void setDataScadenza(String dataScadenza) {
     this.dataScadenza = dataScadenza;
   }
 
@@ -77,20 +75,6 @@ public class DatiCalcoloRimborsoVO  implements Serializable {
     this.mesiValidita = mesiValidita;
   }
 
-  /**
-   * la data di riferimento nel formato DD-MM-YYYY     
-   **/
-  
-  @ApiModelProperty(example = "15-08-2022", value = "la data di riferimento nel formato DD-MM-YYYY     ")
-  @JsonProperty("data_riferimento") 
- 
-  public Date getDataRiferimento() {
-    return dataRiferimento;
-  }
-  public void setDataRiferimento(Date dataRiferimento) {
-    this.dataRiferimento = dataRiferimento;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -104,13 +88,12 @@ public class DatiCalcoloRimborsoVO  implements Serializable {
     return Objects.equals(targa, datiCalcoloRimborsoVO.targa) &&
         Objects.equals(tipoVeicolo, datiCalcoloRimborsoVO.tipoVeicolo) &&
         Objects.equals(dataScadenza, datiCalcoloRimborsoVO.dataScadenza) &&
-        Objects.equals(mesiValidita, datiCalcoloRimborsoVO.mesiValidita) &&
-        Objects.equals(dataRiferimento, datiCalcoloRimborsoVO.dataRiferimento);
+        Objects.equals(mesiValidita, datiCalcoloRimborsoVO.mesiValidita);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(targa, tipoVeicolo, dataScadenza, mesiValidita, dataRiferimento);
+    return Objects.hash(targa, tipoVeicolo, dataScadenza, mesiValidita);
   }
 
   @Override
@@ -122,7 +105,6 @@ public class DatiCalcoloRimborsoVO  implements Serializable {
     sb.append("    tipoVeicolo: ").append(toIndentedString(tipoVeicolo)).append("\n");
     sb.append("    dataScadenza: ").append(toIndentedString(dataScadenza)).append("\n");
     sb.append("    mesiValidita: ").append(toIndentedString(mesiValidita)).append("\n");
-    sb.append("    dataRiferimento: ").append(toIndentedString(dataRiferimento)).append("\n");
     sb.append("}");
     return sb.toString();
   }

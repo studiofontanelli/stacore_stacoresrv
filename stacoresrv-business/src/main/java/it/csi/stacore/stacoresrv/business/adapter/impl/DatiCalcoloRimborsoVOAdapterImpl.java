@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 
 import it.csi.stacore.stacoresrv.api.dto.DatiCalcoloRimborsoVO;
 import it.csi.stacore.stacoresrv.business.adapter.DatiCalcoloRimborsoVOAdapter;
+import it.csi.stacore.stacoresrv.util.DateUtil;
 import it.csi.stacore.stacoresrv.util.Tracer;
+import it.csi.stacore.stacoresrv.util.XmlSerializer;
 import it.csi.stacore.stacoresrv.util.adapter.CommonDtoAdapter;
 import it.csi.stacore.stacoresrv.util.adapter.exception.DtoConversionException;
 import it.csi.stacore.staon.business.bo.DataScadenza;
@@ -17,8 +19,10 @@ import it.csi.stacore.staon.business.bo.DatiCalcolo;
 import it.csi.stacore.staon.business.bo.Regione;
 import it.csi.stacore.staon.business.bo.TipoVeicolo;
 import it.csi.stacore.staon.business.bo.factory.DatiCalcoloFactory;
+import it.csi.stacore.staon.business.bo.factory.UtenteFactory;
 import it.csi.stacore.staon.business.bo.id.IdDecodifica;
 import it.csi.stacore.staon.business.bo.id.IdRegione;
+import it.csi.stacore.staon.business.bo.utente.Utente;
 
 
 @Component
@@ -71,13 +75,42 @@ public class DatiCalcoloRimborsoVOAdapterImpl extends CommonDtoAdapter<DatiCalco
 			}
 			
 			String targa = v.getTarga();
-			TipoVeicolo tipoVeicolo = new TipoVeicolo(new IdDecodifica(1l), v.getTipoVeicolo(), "-");
-			Date dataScadenza = v.getDataScadenza();
-			Integer mesiValidita = v.getMesiValidita();
-			Regione regione = new Regione(new IdRegione(13), "13", "Piemonte");
-				
-			DatiCalcolo result = DatiCalcoloFactory.getInstance().buildByDatiCalcoloRimborso(targa, tipoVeicolo, dataScadenzaCompensata, mesiValidita, dataScadenza, null, regione);	
 			
+			// AF: DA MODIFICARE
+			TipoVeicolo tipoVeicolo = new TipoVeicolo(new IdDecodifica(1l), v.getTipoVeicolo(), "AUTOVEICOLO");
+			
+			
+			Integer mesiValidita = v.getMesiValidita();
+			Regione regione = null; 
+				
+			java.util.Date dataRiferimento = new java.util.Date();
+			
+			DataScadenza dataScadenza = new DataScadenza(new Integer(v.getDataScadenza()));
+			
+			/*
+			 * 
+			 * String dataScadenzaStr = "201902";
+			
+			TipoVeicolo tipoVeicolo = new TipoVeicolo(new IdDecodifica(1L),"A", "AUTOVEICOLO");
+
+			DataScadenza dataScadenza = new DataScadenza(new Integer(dataScadenzaStr));
+			String targa = "XX663LW";
+			Regione regione = null; 
+			int mesiValidita = 12;
+			java.util.Date dataRiferimento = new java.util.Date();
+
+			DatiCalcolo datiCalcolo = DatiCalcoloFactory.getInstance().buildByDatiCalcoloRimborso(targa, tipoVeicolo, dataScadenza, mesiValidita, dataRiferimento, null, regione);
+		
+			Utente utente = UtenteFactory.getInstance().buildUtenteApplicativoByIdUtente("DEMO 22");
+			
+			 * 
+			 */
+			
+			DatiCalcolo result = DatiCalcoloFactory.getInstance().buildByDatiCalcoloRimborso(targa, tipoVeicolo, dataScadenza, mesiValidita, dataRiferimento, null, regione);	
+			
+			if(LOG.isDebugEnabled()) {
+				Tracer.debug(LOG, getClass().getName(), method, "DatiCalcolo\n " + XmlSerializer.objectToXml(result));
+			}
 			return result;
 			
 		}
