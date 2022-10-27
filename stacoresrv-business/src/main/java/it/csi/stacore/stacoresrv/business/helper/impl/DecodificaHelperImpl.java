@@ -4,22 +4,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.csi.stacore.stacoresrv.api.dto.DecodificaVO;
 import it.csi.stacore.stacoresrv.api.dto.RegioneVO;
+import it.csi.stacore.stacoresrv.api.dto.TipoVeicoloVO;
+import it.csi.stacore.stacoresrv.business.adapter.TipoVeicoloAdapter;
 import it.csi.stacore.stacoresrv.business.dto.ErrorDetailDto;
 import it.csi.stacore.stacoresrv.business.exception.HelperException;
 import it.csi.stacore.stacoresrv.business.exception.NoDataFoundException;
 import it.csi.stacore.stacoresrv.business.exception.ValidationException;
 import it.csi.stacore.stacoresrv.business.helper.DecodificaHelper;
+import it.csi.stacore.stacoresrv.integration.dao.DecodificaDAO;
 import it.csi.stacore.stacoresrv.util.Tracer;
+import it.csi.stacore.staon.business.bo.TipoVeicolo;
 
 @Service("decodificaHelper")
 public class DecodificaHelperImpl extends CommonHelperImpl implements DecodificaHelper {
+	
+	
+	
+	
+	@Autowired
+	private DecodificaDAO decodificaDAO;
+	
+	@Autowired
+	private TipoVeicoloAdapter tipoVeicoloAdapter;
 	
 	@PostConstruct
 	public void init() {
@@ -143,41 +159,69 @@ public class DecodificaHelperImpl extends CommonHelperImpl implements Decodifica
 	public List<DecodificaVO> findTipoCompensazione() throws HelperException, NoDataFoundException, ValidationException {
 		final String method = "findTipoCompensazione";		
 		List<DecodificaVO> result = new ArrayList<>();
-		try 
-		{			
+		try {			
 			//MOCK
 			result.add(this.createTipoDecodificaMock("Tipo Compensazione"));			
-			
-		}catch (Exception e) {			
+		}
+		catch (Exception e) {			
 			Tracer.error(LOG, getClass().getName(), method, "Exception " + e);
 			List<ErrorDetailDto> errorDetails = new ArrayList<>();
 			ErrorDetailDto errorDetailDto = new ErrorDetailDto("Unexpected error", e.getMessage());
 			errorDetails.add(errorDetailDto);
 			throw new HelperException(method,errorDetails);
 		}	
-		
 		return result;
 	}
 	
 	@Override
-	public List<DecodificaVO> findTipoVeicolo() throws HelperException, NoDataFoundException, ValidationException {
+	public List<TipoVeicoloVO> findTipoVeicolo() throws HelperException, NoDataFoundException, ValidationException {
 		final String method = "findTipoVeicolo";		
-		List<DecodificaVO> result = new ArrayList<>();
-		try 
-		{			
-			//MOCK
-			result.add(this.createTipoDecodificaMock("Tipo Veicolo"));			
-			
+		List<TipoVeicoloVO> result = new ArrayList<TipoVeicoloVO>();
+		try  {			
+			List<TipoVeicolo> tv = decodificaDAO.findTipoVeicolo();
+			result = tipoVeicoloAdapter.convertTo(tv);
 		}catch (Exception e) {			
-			Tracer.error(LOG, getClass().getName(), method, "Exception " + e);
-			List<ErrorDetailDto> errorDetails = new ArrayList<>();
-			ErrorDetailDto errorDetailDto = new ErrorDetailDto("Unexpected error", e.getMessage());
-			errorDetails.add(errorDetailDto);
-			throw new HelperException(method,errorDetails);
+			Tracer.error(LOG, getClass().getName(), method, "HelperException "  +e);
+			throw new HelperException(e);
 		}	
-		
 		return result;
 	}
+	
+	@Override
+	public TipoVeicoloVO getTipoVeicoloByCodice(String codice) throws HelperException, NoDataFoundException {
+		final String method = "findTipoVeicoloByCodice";		
+		TipoVeicoloVO result = null;
+		try  {			
+			List<TipoVeicoloVO> list = findTipoVeicolo();
+			
+			List<TipoVeicoloVO> ll = list
+					  .stream()
+					  .filter(
+							  c -> 
+					  			StringUtils.equalsIgnoreCase(c.getDecodifica().getCodice(), codice)
+					  		)
+					  .collect(Collectors.toList());
+			
+			if(ll.size() == 1) {
+				result = ll.get(0);
+			}
+			else {
+				throw new NoDataFoundException("Nessun dato trovato");
+			}
+			
+		}
+		catch (NoDataFoundException e) {			
+			Tracer.error(LOG, getClass().getName(), method, "NoDataFoundException "  +e);
+			throw e;
+		}
+		catch (Exception e) {			
+			Tracer.error(LOG, getClass().getName(), method, "HelperException "  +e);
+			throw new HelperException(e);
+		}	
+		return result;
+	}
+	
+	
 	
 	/*********************************************************************
 	 * Funzioni MOCK
@@ -208,6 +252,8 @@ public class DecodificaHelperImpl extends CommonHelperImpl implements Decodifica
 		decodificaVO.setIdDecodifica(1L);
 		
 		return decodificaVO;
-	}		
+	}
+
+			
 
 }

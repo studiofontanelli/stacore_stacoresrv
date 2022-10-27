@@ -20,7 +20,9 @@ import it.csi.stacore.stacoresrv.business.adapter.EsitoCalcoloRimborsoAdapter;
 import it.csi.stacore.stacoresrv.business.adapter.EsitoCalcoloRimborsoNonGodutoAdapter;
 import it.csi.stacore.stacoresrv.business.dto.ErrorDetailDto;
 import it.csi.stacore.stacoresrv.business.exception.HelperException;
+import it.csi.stacore.stacoresrv.business.exception.NoDataFoundException;
 import it.csi.stacore.stacoresrv.business.exception.ValidationException;
+import it.csi.stacore.stacoresrv.business.helper.DecodificaHelper;
 import it.csi.stacore.stacoresrv.business.helper.RimborsiHelper;
 import it.csi.stacore.stacoresrv.integration.service.staon.ServizioRimborsi;
 import it.csi.stacore.stacoresrv.util.DateUtil;
@@ -51,7 +53,10 @@ public class RimborsiHelperImpl extends CommonHelperImpl implements RimborsiHelp
 	@Autowired
 	private EsitoCalcoloRimborsoNonGodutoAdapter esitoCalcoloRimborsoNonGodutoAdapter;
 	
-
+	@Autowired
+	private DecodificaHelper decodificaHelper;
+	
+	
 	@PostConstruct
 	public void init() {
 		final String method = "init";
@@ -148,6 +153,14 @@ public class RimborsiHelperImpl extends CommonHelperImpl implements RimborsiHelp
 			if(StringUtils.isBlank(datiCalcoloVO.getTipoVeicolo())) {
 				errors.add(new ErrorDetailDto("tipo_veicolo", "tipo veicolo non valorizzato"));
 			}
+			else {
+				try {
+					decodificaHelper.getTipoVeicoloByCodice(datiCalcoloVO.getTipoVeicolo());
+				}
+				catch(NoDataFoundException e) {
+					errors.add(new ErrorDetailDto("tipo_veicolo", "tipo veicolo non riconosciuto"));
+				}
+			}
 			if(StringUtils.isBlank(datiCalcoloVO.getTipoCompensazione())) {
 				errors.add(new ErrorDetailDto("tipo_compensazione", "tipo compensazione non valorizzato"));
 			}
@@ -157,9 +170,6 @@ public class RimborsiHelperImpl extends CommonHelperImpl implements RimborsiHelp
 			if(datiCalcoloVO.getDataEventoChiusura() == null) {
 				errors.add(new ErrorDetailDto("data_evento_chiusura", "data evento chiusura non valorizzata"));
 			}
-			
-			
-			
 			else {
 				try {
 					Date dataScadenza = DateUtil.parse(datiCalcoloVO.getDataScadenza(), DateUtil.YEAR_MONTH_NO_SEPARATOR);

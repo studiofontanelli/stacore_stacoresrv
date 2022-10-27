@@ -9,6 +9,11 @@ import org.springframework.stereotype.Component;
 
 import it.csi.stacore.stacoresrv.api.dto.DatiCalcoloRimborsoVO;
 import it.csi.stacore.stacoresrv.business.adapter.DatiCalcoloRimborsoVOAdapter;
+import it.csi.stacore.stacoresrv.business.adapter.DecodificaAdapter;
+import it.csi.stacore.stacoresrv.business.adapter.TipoVeicoloAdapter;
+import it.csi.stacore.stacoresrv.business.exception.NoDataFoundException;
+import it.csi.stacore.stacoresrv.business.helper.DecodificaHelper;
+import it.csi.stacore.stacoresrv.integration.dao.DecodificaDAO;
 import it.csi.stacore.stacoresrv.util.DateUtil;
 import it.csi.stacore.stacoresrv.util.Tracer;
 import it.csi.stacore.stacoresrv.util.XmlSerializer;
@@ -42,7 +47,12 @@ public class DatiCalcoloRimborsoVOAdapterImpl extends CommonDtoAdapter<DatiCalco
 		return applicationContext;
 	}
 
-
+	@Autowired
+	private DecodificaHelper decodificaHelper;
+	
+	@Autowired
+	private TipoVeicoloAdapter tipoVeicoloAdapter;
+	
 	@Override
 	public DatiCalcoloRimborsoVO convertTo(DatiCalcolo t) throws DtoConversionException {
 		throw new DtoConversionException("Not implemented yet");
@@ -54,8 +64,6 @@ public class DatiCalcoloRimborsoVOAdapterImpl extends CommonDtoAdapter<DatiCalco
 	public DatiCalcolo convertFrom(DatiCalcoloRimborsoVO v) throws DtoConversionException {
 		final String method = "convertTo";
 		try {
-			DataScadenza dataScadenzaCompensata = null;
-			
 			
 			if(v == null) {
 				throw new DtoConversionException("DatiCalcoloRimborsoVO non valorizzato");
@@ -76,8 +84,8 @@ public class DatiCalcoloRimborsoVOAdapterImpl extends CommonDtoAdapter<DatiCalco
 			
 			String targa = v.getTarga();
 			
-			// AF: DA MODIFICARE
-			TipoVeicolo tipoVeicolo = new TipoVeicolo(new IdDecodifica(1l), v.getTipoVeicolo(), "AUTOVEICOLO");
+			
+			TipoVeicolo tipoVeicolo = tipoVeicoloAdapter.convertFrom(decodificaHelper.getTipoVeicoloByCodice(v.getTipoVeicolo()));
 			
 			
 			Integer mesiValidita = v.getMesiValidita();
@@ -87,25 +95,6 @@ public class DatiCalcoloRimborsoVOAdapterImpl extends CommonDtoAdapter<DatiCalco
 			
 			DataScadenza dataScadenza = new DataScadenza(new Integer(v.getDataScadenza()));
 			
-			/*
-			 * 
-			 * String dataScadenzaStr = "201902";
-			
-			TipoVeicolo tipoVeicolo = new TipoVeicolo(new IdDecodifica(1L),"A", "AUTOVEICOLO");
-
-			DataScadenza dataScadenza = new DataScadenza(new Integer(dataScadenzaStr));
-			String targa = "XX663LW";
-			Regione regione = null; 
-			int mesiValidita = 12;
-			java.util.Date dataRiferimento = new java.util.Date();
-
-			DatiCalcolo datiCalcolo = DatiCalcoloFactory.getInstance().buildByDatiCalcoloRimborso(targa, tipoVeicolo, dataScadenza, mesiValidita, dataRiferimento, null, regione);
-		
-			Utente utente = UtenteFactory.getInstance().buildUtenteApplicativoByIdUtente("DEMO 22");
-			
-			 * 
-			 */
-			
 			DatiCalcolo result = DatiCalcoloFactory.getInstance().buildByDatiCalcoloRimborso(targa, tipoVeicolo, dataScadenza, mesiValidita, dataRiferimento, null, regione);	
 			
 			if(LOG.isDebugEnabled()) {
@@ -113,6 +102,10 @@ public class DatiCalcoloRimborsoVOAdapterImpl extends CommonDtoAdapter<DatiCalco
 			}
 			return result;
 			
+		}
+		catch(NoDataFoundException e) {
+			Tracer.error(LOG, getClass().getName(), method, "Exception " + e);
+			throw new DtoConversionException("tipo veicolo non valido");
 		}
 		catch(Exception e) {
 			Tracer.error(LOG, getClass().getName(), method, "Exception " + e);

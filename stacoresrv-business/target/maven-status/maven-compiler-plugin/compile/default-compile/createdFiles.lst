@@ -1,3 +1,4 @@
+it/csi/stacore/stacoresrv/business/adapter/impl/TipoVeicoloAdapterImpl.class
 it/csi/stacore/stacoresrv/business/helper/ParametroApplicativoHelper.class
 it/csi/stacore/stacoresrv/business/helper/impl/ComuneHelperImpl.class
 it/csi/stacore/stacoresrv/business/adapter/DatiCalcoloRimborsoNonGodutoVOAdapter.class
@@ -19,6 +20,7 @@ it/csi/stacore/stacoresrv/business/adapter/impl/NazioneAdapterImpl.class
 it/csi/stacore/stacoresrv/business/helper/impl/PrivinciaHelperImpl.class
 it/csi/stacore/stacoresrv/business/adapter/EsitoCalcoloRimborsoNonGodutoAdapter.class
 it/csi/stacore/stacoresrv/business/adapter/ComuneAdapter.class
+it/csi/stacore/stacoresrv/business/adapter/TipoVeicoloAdapter.class
 it/csi/stacore/stacoresrv/business/exception/NoDataFoundException.class
 it/csi/stacore/stacoresrv/business/adapter/DatiCalcoloRimborsoVOAdapter.class
 it/csi/stacore/stacoresrv/business/dto/ErrorDetailDto.class
