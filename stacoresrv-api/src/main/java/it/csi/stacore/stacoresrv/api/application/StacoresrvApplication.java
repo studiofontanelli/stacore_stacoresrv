@@ -11,8 +11,6 @@ import javax.ws.rs.core.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import it.csi.stacore.stacoresrv.api.interceptor.LoggingInterceptor;
-import it.csi.stacore.stacoresrv.api.provider.ExceptionHandler;
 import it.csi.stacore.stacoresrv.util.Constants;
 import it.csi.stacore.stacoresrv.util.Tracer;
 
@@ -27,22 +25,6 @@ public class StacoresrvApplication extends Application {
 	private Set<Class<?>> classes = new HashSet<>();
 
 
-	private List<String> getServiceList(){
-		List<String> l = new ArrayList<String>();
-		l.add("testApi");
-		return l;
-
-	}
-
-	private List<Class> getProviderList(){
-		List<Class> l = new ArrayList<Class>();
-		l.add(ExceptionHandler.class);
-		l.add(LoggingInterceptor.class);
-		return l;
-
-	}
-	
-	
 	private List<Class> getSwaggerList(){
 		List<Class> l = new ArrayList<Class>();
 		l.add(io.swagger.jaxrs.listing.ApiListingResource.class);
@@ -51,64 +33,14 @@ public class StacoresrvApplication extends Application {
 
 	}
 	
-	/*
-	 * 
-	 * public RestConfiguration() {
-        BeanConfig beanConfig = new BeanConfig();
-        beanConfig.setVersion("v1");
-        beanConfig.setSchemes(new String[]{"http"});
-        beanConfig.setHost(System.getProperty("togus.swagger.host", "localhost:8080"));
-        beanConfig.setBasePath(System.getProperty("togus.swagger.basepath", "togus/rest"));
-        beanConfig.setResourcePackage("br.com.diegogusava.togus.endpoint");
-        beanConfig.setScan(true);
-    }
-	 * 
-	 * 
-	 */
-	
-
 	public StacoresrvApplication() {
 		final String method = "CONSTRUCTOR";
-		try {
-
-			// Resources
-			for(String api : getServiceList()) {
-				Tracer.info(LOG, getClass().getName(), method, "adding api " + api);
-				//this.singletons.add(ApplicationContextManager.getBean(api));
-				Tracer.info(LOG, getClass().getName(), method, "api " + api + " added correctly");
-			}
-			// Providers
-			for(Class provider : getProviderList()) {
-				Tracer.info(LOG, getClass().getName(), method, "adding provider " + provider);
-				classes.add(provider);
-			}
-			
-			// SWAGGER 
-		/*
-			for(Class clazz : getSwaggerList()) {
-				Tracer.info(LOG, getClass().getName(), method, "adding swagger " + clazz);
-				classes.add(clazz);
-			}
-			
-			
-			BeanConfig beanConfig = new BeanConfig();
-	        beanConfig.setVersion("v1");
-	        beanConfig.setSchemes(new String[]{"http"});
-	        beanConfig.setHost("localhost:8080");
-	        beanConfig.setBasePath("/stassosrv");
-	        beanConfig.setResourcePackage("it.csi.stacore.staaudit.api.service");
-	        beanConfig.setScan(true);
-			
-			*/
-			
+		try {			
 			Tracer.info(LOG, getClass().getName(), method, "Startup rest services done correctly!");
-
-
-
 		}
 		catch(Exception e) {
 			Tracer.error(LOG, getClass().getName(), method, "Exception: " + e);
-			throw new RuntimeException("Errore infase di startup configurazione servizi rest", e);
+			throw new RuntimeException("Errore in fase di startup configurazione servizi rest", e);
 		}
 	}
 

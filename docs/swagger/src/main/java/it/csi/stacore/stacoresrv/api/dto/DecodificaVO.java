@@ -23,7 +23,7 @@ public class DecodificaVO  implements Serializable {
    **/
   
   @ApiModelProperty(value = "")
-  @JsonProperty("idDecodifica") 
+  @JsonProperty("id_decodifica") 
  
   public Long getIdDecodifica() {
     return idDecodifica;

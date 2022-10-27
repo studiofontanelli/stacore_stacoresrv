@@ -13,5 +13,6 @@ public enum Fonte {
   POSTE,
   RISC,
   REG,
+  CODICE_RIV,
   NN;
 }
