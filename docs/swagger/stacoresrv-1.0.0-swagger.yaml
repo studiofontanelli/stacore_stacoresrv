@@ -12,6 +12,10 @@ tags:
   description: test resources
 - name: rimborsi
   description: I rimborsi
+- name: parametro-applicativo
+  description: gestione lettura parametri applicativi
+- name: decodifica
+  description: azioni di ricerca su entita di decodifica
     
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
@@ -40,6 +44,107 @@ paths:
           schema:
             $ref: '#/definitions/ErrorDto'
   
+  /parametri-applicativi/{id}:
+    get:
+      tags:
+        - parametro-applicativo
+      summary: parametro-applicativo 
+      description: carica parametro applicativo
+      operationId: getParametroApplicativo
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: string                      
+          description: id parametro applicativo da ricercare
+          required: true
+      responses:
+        200:
+          schema:                       
+              $ref: '#/definitions/ParametroApplicativoVO'
+          description: OK
+        400:
+          description: parametri obbligatori non valorizzati
+          schema:
+            $ref: '#/definitions/ErrorDto'
+        404:
+          description: nessun parametro applicativo corrispondente ai criteri di ricerca
+          schema:
+            $ref: '#/definitions/ErrorDto'
+        422:
+          description: errore formato dati
+          schema:
+            $ref: '#/definitions/ErrorDto'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorDto'
+            
+  /parametri-applicativi/list:
+    get:
+      tags:
+        - parametro-applicativo
+      summary: parametro-applicativo 
+      description: get tutti i parametri operativi
+      operationId: getParametriApplicativi
+      produces:
+      - application/json
+      responses:
+        200:
+          schema:
+            type: array
+            items:
+              type: object            
+              $ref: '#/definitions/ParametroApplicativoVO'
+          description: OK
+        400:
+          description: parametri obbligatori non valorizzati
+          schema:
+            $ref: '#/definitions/ErrorDto'
+        404:
+          description: nessun parametro applicativo corrispondente ai criteri di ricerca
+          schema:
+            $ref: '#/definitions/ErrorDto'
+        422:
+          description: errore formato dati
+          schema:
+            $ref: '#/definitions/ErrorDto'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorDto'
+  
+  /decodifiche/tipi-veicolo/list:
+    get:
+      tags:
+        - decodifica
+      summary: decodifica 
+      description: ricerca lista tipo veicolo.
+      operationId: findTipoVeicolo
+      produces:
+         - application/json      
+      responses:
+        200:
+          schema:
+            type: array
+            items:
+              type: object            
+              $ref: '#/definitions/DecodificaVO'
+          description: OK
+        400:
+          description: parametri obbligatori non valorizzati
+          schema:
+            $ref: '#/definitions/ErrorDto'
+        422:
+          description: errore formato dati
+          schema:
+            $ref: '#/definitions/ErrorDto'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorDto'
+  
   /rimborsi/calcola:
     post:  
       tags:
@@ -62,21 +167,45 @@ paths:
       responses:
         200:
           schema:
-            $ref: '#/definitions/EsitoCalcolaRimborsoVO'
+            $ref: '#/definitions/EsitoCalcoloRimborsoVO'
           description: OK
         400:
           description: "Parametro non valorizzato"
         500:
           description: Internal server error
           schema:
-            $ref: '#/definitions/ErrorDto'  
+            $ref: '#/definitions/ErrorDto' 
   
-     
-               
-     
-     
-               
-   
+  /rimborsi/non-goduti/calcola:
+    post:  
+      tags:
+        - rimborsi
+      description: >
+        Effettua il calcolo del rimborso non goduto
+      operationId: calcolaRimborsoNonGoduto
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          required: true
+          name: datiCalcolo
+          schema: 
+            $ref: '#/definitions/DatiCalcoloRimborsoNonGodutoVO'
+          description: > 
+            I dati calcolo per effettuare il rimborso non goduto
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/EsitoCalcoloRimborsoNonGodutoVO'
+          description: OK
+        400:
+          description: "Parametro non valorizzato"
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorDto' 
 definitions:
   
   DatiCalcoloVO:
@@ -139,11 +268,22 @@ definitions:
         type: string
         description: >
           Il codice tipo veicolo (A = Autoveicolo, M= Motoveicolo, ecc )
+      tipo_compensazione:
+        type: string
+        description: >
+          Il codice tipo compensazione 
+        example: (P = ROTTAMAZIONE CON PERMUTA)
       data_scadenza:
         type: string
         description: >
           la data di scadenza nel formato YYYYMM    
         example: 202212
+      data_evento_chiusura:
+        type: string
+        format: date
+        description: >
+          data nel formato YYYY-MM-DD
+        example: 2017-07-21  
       mesi_validita:
         type: integer
         format: int32
@@ -178,10 +318,10 @@ definitions:
       importo_totale_pagato:
         type: object
         $ref: '#/definitions/ValutaVO' 
-      importo_totale_eccedente:
+      importo_eccedente:
         type: object
         $ref: '#/definitions/ValutaVO'
-      importo_totale_non_goduto:
+      importo_non_goduto:
         type: object
         $ref: '#/definitions/ValutaVO'
       data_ultimo_giorno_utile_pagamento:
@@ -1285,7 +1425,7 @@ definitions:
     type: object
     description: Decodifica
     properties:
-      idDecodifica:
+      id_decodifica:
         type: integer
         format: int64
       descrizione:
@@ -1296,18 +1436,18 @@ definitions:
   TipoVeicolo:
     type: string    
     enum: &TipoVeicolo 
-       - CODICE_AUTOVEICOLO               # -> "A"
-       - CODICE_MOTOVEICOLO               # -> "M"
-       - CODICE_RIMORCHIO                 # -> "R"
-       - CODICE_CICLOMOTORE               # -> "C"
-       - CODICE_QUADRICICLO_LEGGERO       # -> "Q"
-       - CODICE_TARGA_PROVA_AUTOVEICOLO   # -> "PA"
-       - CODICE_TARGA_PROVA_MOTOVEICOLO   # -> "PM"
-       - CODICE_TARGA_PROVA_RIMORCHIO     # -> "PR"
-       - CODICE_TARGA_PROVA_CICLOMOTORE   # -> "PC"
-       - CODICE_TARGA_PROVA_QUADRICICLO_LEGGERO   # -> "PQ"
-       - CODICE_TARGA_PROVA_AUTOSCAFO             # -> "PS"
-       - CODICE_TARGA_PROVA_MOTORE_FUORIBORDO     # -> "MF"
+       - AUTOVEICOLO               # -> "A"
+       - MOTOVEICOLO               # -> "M"
+       - RIMORCHIO                 # -> "R"
+       - CICLOMOTORE               # -> "C"
+       - QUADRICICLO_LEGGERO       # -> "Q"
+       - TARGA_PROVA_AUTOVEICOLO   # -> "PA"
+       - TARGA_PROVA_MOTOVEICOLO   # -> "PM"
+       - TARGA_PROVA_RIMORCHIO     # -> "PR"
+       - TARGA_PROVA_CICLOMOTORE   # -> "PC"
+       - TARGA_PROVA_QUADRICICLO_LEGGERO   # -> "PQ"
+       - TARGA_PROVA_AUTOSCAFO             # -> "PS"
+       - TARGA_PROVA_MOTORE_FUORIBORDO     # -> "MF"
   
   TipoVeicoloVO:
     type: object
@@ -1784,15 +1924,7 @@ definitions:
         type: string
         description: la descrizione dell'errore
         example: 'Internal server error, ecc'
-  TestModel:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-    description: Entità di test
 # Added by API Auto Mocking Plugin
 basePath: /andreafontanelli/stacoresrv/1.0.0
 schemes:
  - https
- - http

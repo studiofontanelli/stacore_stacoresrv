@@ -10,6 +10,7 @@ import it.csi.stacore.stacoresrv.util.Tracer;
 import it.csi.stacore.stacoresrv.util.XmlSerializer;
 import it.csi.stacore.staon.business.bo.DatiCalcolo;
 import it.csi.stacore.staon.business.bo.EsitoCalcoloRimborso;
+import it.csi.stacore.staon.business.bo.EsitoCalcoloRimborsoNonGoduto;
 import it.csi.stacore.staon.business.bo.utente.Utente;
 import it.csi.stacore.staon.exception.ApplicationException;
 import it.csi.stacore.staon.exception.ServiceException;
@@ -44,6 +45,24 @@ public class ServizioRimborsiImpl extends ParentIntegrationServiceImpl implement
 		}
 
 
+	}
+
+	@Override
+	public EsitoCalcoloRimborsoNonGoduto calcolaRimborsoNonGoduto(DatiCalcolo datiCalcolo, Utente utente) throws IntegrationException {
+		final String method = "calcolaRimborso";
+		try {
+			if(LOG.isDebugEnabled()) {
+				Tracer.debug(LOG, getClass().getName(), method, "datiCalcolo\n "  + XmlSerializer.objectToXml(datiCalcolo));
+				Tracer.debug(LOG, getClass().getName(), method, "utente\n "  + XmlSerializer.objectToXml(utente));
+			}
+			return getServizioRimborsiInterface().calcolaRimborsoNonGoduto(datiCalcolo, utente);
+		} catch (ServiceException | ApplicationException | UnrecoverableException e) {
+			Tracer.error(LOG, getClass().getName(), method, "Exception "  +e);
+			throw new IntegrationException("Problemi riscontrati nel servizio di calcolo rimborso");
+		}
+		finally {
+
+		}
 	}
 
 }

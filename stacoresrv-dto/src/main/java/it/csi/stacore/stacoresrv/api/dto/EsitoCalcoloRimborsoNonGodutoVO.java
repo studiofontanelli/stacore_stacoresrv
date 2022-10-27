@@ -17,8 +17,8 @@ public class EsitoCalcoloRimborsoNonGodutoVO  implements Serializable {
   
   private ValutaVO importoTotaleDovuto = null;
   private ValutaVO importoTotalePagato = null;
-  private ValutaVO importoTotaleEccedente = null;
-  private ValutaVO importoTotaleNonGoduto = null;
+  private ValutaVO importoEccedente = null;
+  private ValutaVO importoNonGoduto = null;
   private Date dataUltimoGiornoUtilePagamento = null;
   private Integer mensilita = null;
 
@@ -52,26 +52,26 @@ public class EsitoCalcoloRimborsoNonGodutoVO  implements Serializable {
    **/
   
   @ApiModelProperty(value = "")
-  @JsonProperty("importo_totale_eccedente") 
+  @JsonProperty("importo_eccedente") 
  
-  public ValutaVO getImportoTotaleEccedente() {
-    return importoTotaleEccedente;
+  public ValutaVO getImportoEccedente() {
+    return importoEccedente;
   }
-  public void setImportoTotaleEccedente(ValutaVO importoTotaleEccedente) {
-    this.importoTotaleEccedente = importoTotaleEccedente;
+  public void setImportoEccedente(ValutaVO importoEccedente) {
+    this.importoEccedente = importoEccedente;
   }
 
   /**
    **/
   
   @ApiModelProperty(value = "")
-  @JsonProperty("importo_totale_non_goduto") 
+  @JsonProperty("importo_non_goduto") 
  
-  public ValutaVO getImportoTotaleNonGoduto() {
-    return importoTotaleNonGoduto;
+  public ValutaVO getImportoNonGoduto() {
+    return importoNonGoduto;
   }
-  public void setImportoTotaleNonGoduto(ValutaVO importoTotaleNonGoduto) {
-    this.importoTotaleNonGoduto = importoTotaleNonGoduto;
+  public void setImportoNonGoduto(ValutaVO importoNonGoduto) {
+    this.importoNonGoduto = importoNonGoduto;
   }
 
   /**
@@ -110,18 +110,18 @@ public class EsitoCalcoloRimborsoNonGodutoVO  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EsitoCalcoloRimborsoNonGodutoVO esitoCalcolaRimborsoNonGodutoVO = (EsitoCalcoloRimborsoNonGodutoVO) o;
-    return Objects.equals(importoTotaleDovuto, esitoCalcolaRimborsoNonGodutoVO.importoTotaleDovuto) &&
-        Objects.equals(importoTotalePagato, esitoCalcolaRimborsoNonGodutoVO.importoTotalePagato) &&
-        Objects.equals(importoTotaleEccedente, esitoCalcolaRimborsoNonGodutoVO.importoTotaleEccedente) &&
-        Objects.equals(importoTotaleNonGoduto, esitoCalcolaRimborsoNonGodutoVO.importoTotaleNonGoduto) &&
-        Objects.equals(dataUltimoGiornoUtilePagamento, esitoCalcolaRimborsoNonGodutoVO.dataUltimoGiornoUtilePagamento) &&
-        Objects.equals(mensilita, esitoCalcolaRimborsoNonGodutoVO.mensilita);
+    EsitoCalcoloRimborsoNonGodutoVO esitoCalcoloRimborsoNonGodutoVO = (EsitoCalcoloRimborsoNonGodutoVO) o;
+    return Objects.equals(importoTotaleDovuto, esitoCalcoloRimborsoNonGodutoVO.importoTotaleDovuto) &&
+        Objects.equals(importoTotalePagato, esitoCalcoloRimborsoNonGodutoVO.importoTotalePagato) &&
+        Objects.equals(importoEccedente, esitoCalcoloRimborsoNonGodutoVO.importoEccedente) &&
+        Objects.equals(importoNonGoduto, esitoCalcoloRimborsoNonGodutoVO.importoNonGoduto) &&
+        Objects.equals(dataUltimoGiornoUtilePagamento, esitoCalcoloRimborsoNonGodutoVO.dataUltimoGiornoUtilePagamento) &&
+        Objects.equals(mensilita, esitoCalcoloRimborsoNonGodutoVO.mensilita);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(importoTotaleDovuto, importoTotalePagato, importoTotaleEccedente, importoTotaleNonGoduto, dataUltimoGiornoUtilePagamento, mensilita);
+    return Objects.hash(importoTotaleDovuto, importoTotalePagato, importoEccedente, importoNonGoduto, dataUltimoGiornoUtilePagamento, mensilita);
   }
 
   @Override
@@ -131,8 +131,8 @@ public class EsitoCalcoloRimborsoNonGodutoVO  implements Serializable {
     
     sb.append("    importoTotaleDovuto: ").append(toIndentedString(importoTotaleDovuto)).append("\n");
     sb.append("    importoTotalePagato: ").append(toIndentedString(importoTotalePagato)).append("\n");
-    sb.append("    importoTotaleEccedente: ").append(toIndentedString(importoTotaleEccedente)).append("\n");
-    sb.append("    importoTotaleNonGoduto: ").append(toIndentedString(importoTotaleNonGoduto)).append("\n");
+    sb.append("    importoEccedente: ").append(toIndentedString(importoEccedente)).append("\n");
+    sb.append("    importoNonGoduto: ").append(toIndentedString(importoNonGoduto)).append("\n");
     sb.append("    dataUltimoGiornoUtilePagamento: ").append(toIndentedString(dataUltimoGiornoUtilePagamento)).append("\n");
     sb.append("    mensilita: ").append(toIndentedString(mensilita)).append("\n");
     sb.append("}");

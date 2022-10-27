@@ -13,12 +13,14 @@ import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.interception.PreProcessInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import it.csi.stacore.stacoresrv.util.Constants;
 import it.csi.stacore.stacoresrv.util.Tracer;
 
 
 @Provider
+@Component
 @ServerInterceptor
 public class LoggingInterceptor implements PreProcessInterceptor {
 	protected final static Logger LOG = LoggerFactory.getLogger(Constants.APPLICATION_CODE  + ".interceptor");

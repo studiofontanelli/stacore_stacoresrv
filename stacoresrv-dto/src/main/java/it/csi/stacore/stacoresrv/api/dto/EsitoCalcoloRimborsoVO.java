@@ -82,11 +82,11 @@ public class EsitoCalcoloRimborsoVO  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EsitoCalcoloRimborsoVO esitoCalcolaRimborsoVO = (EsitoCalcoloRimborsoVO) o;
-    return Objects.equals(importoTotaleDovuto, esitoCalcolaRimborsoVO.importoTotaleDovuto) &&
-        Objects.equals(importoTotalePagato, esitoCalcolaRimborsoVO.importoTotalePagato) &&
-        Objects.equals(cifraDaRimborsare, esitoCalcolaRimborsoVO.cifraDaRimborsare) &&
-        Objects.equals(dataUltimoGiornoUtilePagamento, esitoCalcolaRimborsoVO.dataUltimoGiornoUtilePagamento);
+    EsitoCalcoloRimborsoVO esitoCalcoloRimborsoVO = (EsitoCalcoloRimborsoVO) o;
+    return Objects.equals(importoTotaleDovuto, esitoCalcoloRimborsoVO.importoTotaleDovuto) &&
+        Objects.equals(importoTotalePagato, esitoCalcoloRimborsoVO.importoTotalePagato) &&
+        Objects.equals(cifraDaRimborsare, esitoCalcoloRimborsoVO.cifraDaRimborsare) &&
+        Objects.equals(dataUltimoGiornoUtilePagamento, esitoCalcoloRimborsoVO.dataUltimoGiornoUtilePagamento);
   }
 
   @Override

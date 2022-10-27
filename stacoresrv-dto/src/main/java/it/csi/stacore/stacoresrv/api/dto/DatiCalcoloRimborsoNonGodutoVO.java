@@ -1,14 +1,13 @@
 package it.csi.stacore.stacoresrv.api.dto;
 
-import java.util.Objects;
-import java.util.ArrayList;
-import io.swagger.annotations.ApiModel;
-import java.util.Date;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonCreator;
 import java.io.Serializable;
-import javax.validation.constraints.*;
-import io.swagger.annotations.*;
+import java.util.Date;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description="Oggetto utilizzato per calcolare il rimborso")
 

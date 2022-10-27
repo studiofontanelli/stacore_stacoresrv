@@ -1,13 +1,12 @@
 package it.csi.stacore.stacoresrv.api.dto;
 
+import java.io.Serializable;
 import java.util.Objects;
-import java.util.ArrayList;
-import io.swagger.annotations.ApiModel;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-import javax.validation.constraints.*;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description="Decodifica")
 
@@ -23,7 +22,7 @@ public class DecodificaVO  implements Serializable {
    **/
   
   @ApiModelProperty(value = "")
-  @JsonProperty("idDecodifica") 
+  @JsonProperty("id_decodifica") 
  
   public Long getIdDecodifica() {
     return idDecodifica;
